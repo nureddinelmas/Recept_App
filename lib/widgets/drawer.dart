@@ -1,9 +1,42 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
-class DrawerItem extends StatelessWidget {
+class DrawerItem extends StatefulWidget {
   const DrawerItem({super.key});
+
+  @override
+  State<DrawerItem> createState() => _DrawerItemState();
+}
+
+class _DrawerItemState extends State<DrawerItem> {
+  bool passwordIsHidden = false;
+  bool confirmPasswordIsHidden = false;
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final confirmPassController = TextEditingController();
+
+  void _checkIfEmptyOrNot(BuildContext context) {
+    String email, pass, confirm;
+    final scaffold = ScaffoldMessenger.of(context);
+
+    email = emailTextController.text;
+    pass = passwordTextController.text;
+    confirm = confirmPassController.text;
+
+    if (email == "" && pass == "" && confirm == "") {
+      scaffold.showSnackBar(
+        SnackBar(
+          content: const Text("Please fill the forms"),
+          action: SnackBarAction(
+              label: "Undo", onPressed: scaffold.hideCurrentSnackBar),
+        ),
+      );
+    } else {
+      //!* implement write to firebase
+    }
+
+    void addNewUserToFb() {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +95,7 @@ class DrawerItem extends StatelessWidget {
                 width: 250,
                 child: TextFormField(
                   keyboardType: TextInputType.text,
+                  controller: emailTextController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
@@ -83,15 +117,23 @@ class DrawerItem extends StatelessWidget {
                 width: 250,
                 child: TextFormField(
                   keyboardType: TextInputType.text,
+                  obscureText: !passwordIsHidden,
+                  controller: passwordTextController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     labelText: "Password",
                     suffixIcon: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.visibility_off,
-                        color: Colors.blueGrey,
+                      onPressed: () {
+                        setState(() {
+                          passwordIsHidden = !passwordIsHidden;
+                        });
+                      },
+                      icon: Icon(
+                        passwordIsHidden
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: passwordIsHidden ? Colors.green : Colors.grey,
                       ),
                     ),
                   ),
@@ -104,15 +146,25 @@ class DrawerItem extends StatelessWidget {
                 width: 250,
                 child: TextFormField(
                   keyboardType: TextInputType.text,
+                  obscureText: !confirmPasswordIsHidden,
+                  controller: confirmPassController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
                     labelText: "Confirm Password",
                     suffixIcon: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.visibility_off,
-                        color: Colors.blueGrey,
+                      onPressed: () {
+                        setState(() {
+                          confirmPasswordIsHidden = !confirmPasswordIsHidden;
+                        });
+                      },
+                      icon: Icon(
+                        confirmPasswordIsHidden
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: confirmPasswordIsHidden
+                            ? Colors.green
+                            : Colors.grey,
                       ),
                     ),
                   ),
@@ -131,9 +183,19 @@ class DrawerItem extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.only(top: 100.0),
           ),
-          TextButton.icon(
-            onPressed: () {},
-            icon: const Icon(Icons.food_bank),
+          ElevatedButton.icon(
+            onPressed: () {
+              _checkIfEmptyOrNot(context);
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.local_pizza),
+            style: ElevatedButton.styleFrom(
+              elevation: 20,
+              shape: const StadiumBorder(),
+              backgroundColor: Colors.grey,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              textStyle: const TextStyle(fontSize: 20.0, fontFamily: "Times"),
+            ),
             label: const Text("GO!"),
           ),
         ],
