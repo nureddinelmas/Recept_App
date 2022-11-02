@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recept_app/minor%20widgets/search.dart';
+import 'package:recept_app/minor_widgets/search.dart';
 
 class FakeSearch extends StatelessWidget {
   const FakeSearch({

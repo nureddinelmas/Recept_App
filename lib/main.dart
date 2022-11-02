@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-
 import 'package:recept_app/auth_page.dart';
-
+import 'package:recept_app/main_widgets/recept_home.dart';
 
 void main() {
-  runApp(const Main());
+  runApp(const MyApp());
 }
 
-class Main extends StatelessWidget {
-  const Main({Key? key}) : super(key: key);
-
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      title: "Receply",
-      home: AuthPage(),
-
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const AuthPage(),
     );
   }
 }
