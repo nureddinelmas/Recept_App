@@ -1,37 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:recept_app/main%20widgets/home.dart';
+import 'package:recept_app/main_widgets/home.dart';
 
 class ReceptHomeScreen extends StatefulWidget {
-  const ReceptHomeScreen({super.key});
+  const ReceptHomeScreen({Key? key}) : super(key: key);
 
   @override
   State<ReceptHomeScreen> createState() => _ReceptHomeScreenState();
 }
 
 class _ReceptHomeScreenState extends State<ReceptHomeScreen> {
-  int _selectedIndex = 0;
+  int selectedIndex = 0;
 
-  final List<Widget> _tabs = [
-    const HomeScreen(),
-    const Center(
+  final List<Widget> tabs = const [
+    HomeScreen(),
+    Center(
       child: Text("Favorite Screen"),
     ),
-    const Center(
+    Center(
       child: Text("New Recipe Screen"),
     ),
-    const Center(
+    Center(
       child: Text("Profile Screen"),
     ),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _tabs[_selectedIndex],
+      body: tabs[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
         selectedItemColor: Colors.black,
-        currentIndex: _selectedIndex,
+        currentIndex: selectedIndex,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
@@ -42,7 +42,7 @@ class _ReceptHomeScreenState extends State<ReceptHomeScreen> {
         ],
         onTap: (index) {
           setState(() {
-            _selectedIndex = index;
+            selectedIndex = index;
           });
         },
       ),
