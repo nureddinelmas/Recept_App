@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recept_app/minor%20widgets/fake_search.dart';
+import 'package:recept_app/my_home_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: const FakeSearch(),
+        title: const MyHomePage(),
       ),
     );
   }
