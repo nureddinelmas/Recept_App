@@ -1,5 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:recept_app/utils/user.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DrawerItem extends StatefulWidget {
   const DrawerItem({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class DrawerItem extends StatefulWidget {
 class _DrawerItemState extends State<DrawerItem> {
   bool passwordIsHidden = false;
   bool confirmPasswordIsHidden = false;
+  final db = FirebaseFirestore.instance;
+
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPassController = TextEditingController();
@@ -192,7 +196,7 @@ class _DrawerItemState extends State<DrawerItem> {
             style: ElevatedButton.styleFrom(
               elevation: 20,
               shape: const StadiumBorder(),
-            //  backgroundColor: Colors.grey,
+              backgroundColor: Colors.grey,
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               textStyle: const TextStyle(fontSize: 20.0, fontFamily: "Times"),
             ),

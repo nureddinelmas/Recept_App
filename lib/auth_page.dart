@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:recept_app/minor_widgets/search.dart';
 import 'package:recept_app/widgets/drawer.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key}) : super(key: key);
+  const AuthPage({super.key});
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -132,11 +130,8 @@ class _AuthPageState extends State<AuthPage> {
           width: 200,
           child: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReceptHomeScreen(),
-                  ));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ReceptHomeScreen()));
             },
             label: const Text("Log in"),
             icon: const Icon(Icons.login),
