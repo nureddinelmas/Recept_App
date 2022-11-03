@@ -1,10 +1,8 @@
-import 'dart:math';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:recept_app/main_widgets/recept_home.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/drawer_signup.dart';
+import 'package:recept_app/widgets/textformfield_email.dart';
+import "package:recept_app/widgets/textformfield_pass.dart";
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -86,52 +84,11 @@ class _AuthPageState extends State<AuthPage> {
                   const Padding(
                     padding: EdgeInsets.only(top: 50.0),
                   ),
-                  SizedBox(
-                    width: 250,
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      controller: emailTextController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: "Email",
-                        suffixIcon: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.mail,
-                            color: Colors.blueGrey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  TextFormFieldWidgetEmail(emailTextController),
                   const Padding(
                     padding: EdgeInsets.only(top: 10.0),
                   ),
-                  SizedBox(
-                    width: 250,
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      obscureText: !passwordIsHidden,
-                      controller: passwordTextController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: "Password",
-                        suffixIcon: IconButton(
-                          icon: Icon(passwordIsHidden
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                          color: passwordIsHidden ? Colors.green : Colors.grey,
-                          onPressed: () {
-                            setState(() {
-                              passwordIsHidden = !passwordIsHidden;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                  TextFormFieldPass(passwordTextController, passwordIsHidden),
                   const Padding(
                     padding: EdgeInsets.only(top: 30.0),
                   ),

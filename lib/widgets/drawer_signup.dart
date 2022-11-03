@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/textformfield_email.dart';
+import "package:recept_app/widgets/textformfield_pass.dart";
 
 class DrawerSignUpItem extends StatefulWidget {
   const DrawerSignUpItem({Key? key}) : super(key: key);
@@ -95,54 +94,11 @@ class _DrawerSignUpItemState extends State<DrawerSignUpItem> {
           ),
           Column(
             children: [
-              SizedBox(
-                width: 250,
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: emailTextController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: "Email",
-                    suffixIcon: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.mail,
-                        color: Colors.blueGrey,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              TextFormFieldWidgetEmail(emailTextController),
               const Padding(
                 padding: EdgeInsets.only(top: 10.0),
               ),
-              SizedBox(
-                width: 250,
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  obscureText: !passwordIsHidden,
-                  controller: passwordTextController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: "Password",
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          passwordIsHidden = !passwordIsHidden;
-                        });
-                      },
-                      icon: Icon(
-                        passwordIsHidden
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: passwordIsHidden ? Colors.green : Colors.grey,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              TextFormFieldPass(passwordTextController, passwordIsHidden),
               const Padding(
                 padding: EdgeInsets.only(top: 10.0),
               ),
