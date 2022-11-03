@@ -136,12 +136,15 @@ class _AuthPageState extends State<AuthPage> {
                     padding: EdgeInsets.only(top: 30.0),
                   ),
                   GestureDetector(
-                    child: const Text(
-                      "Forgot Password?",
-                      style:
-                          TextStyle(color: Colors.white, fontFamily: "Times"),
-                    ),
-                  ),
+                      child: const Text(
+                        "Forgot Password?",
+                        style:
+                            TextStyle(color: Colors.white, fontFamily: "Times"),
+                      ),
+                      onTap: () {
+                        authHandler.handleForgotPassword(
+                            emailTextController.text, context);
+                      }),
                   const Divider(
                     thickness: 2,
                     indent: 100,
