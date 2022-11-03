@@ -1,33 +1,35 @@
-import 'package:flutter/material.dart';
-import 'package:recept_app/utils/user.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:math';
 
-class DrawerItem extends StatefulWidget {
-  const DrawerItem({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
+
+class DrawerSignUpItem extends StatefulWidget {
+  const DrawerSignUpItem({Key? key}) : super(key: key);
 
   @override
-  State<DrawerItem> createState() => _DrawerItemState();
+  State<DrawerSignUpItem> createState() => _DrawerSignUpItemState();
 }
 
-class _DrawerItemState extends State<DrawerItem> {
+class _DrawerSignUpItemState extends State<DrawerSignUpItem> {
   bool passwordIsHidden = false;
   bool confirmPasswordIsHidden = false;
-  final db = FirebaseFirestore.instance;
+
+  final authHandler = FirebaseProvider();
 
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPassController = TextEditingController();
 
   void _checkIfEmptyOrNot(BuildContext context) {
-    String email, pass, confirm;
+    String email, pass, confirmPass;
     final scaffold = ScaffoldMessenger.of(context);
 
     email = emailTextController.text;
     pass = passwordTextController.text;
-    confirm = confirmPassController.text;
+    confirmPass = confirmPassController.text;
 
-    if (email == "" && pass == "" && confirm == "") {
+    if (email == "" && pass == "" && confirmPass == "") {
       scaffold.showSnackBar(
         SnackBar(
           content: const Text("Please fill the forms"),
@@ -36,10 +38,8 @@ class _DrawerItemState extends State<DrawerItem> {
         ),
       );
     } else {
-      //!* implement write to firebase
+      authHandler.handleSignUp(email, pass, confirmPass);
     }
-
-    void addNewUserToFb() {}
   }
 
   @override

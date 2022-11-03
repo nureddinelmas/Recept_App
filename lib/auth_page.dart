@@ -1,6 +1,10 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
-import 'package:recept_app/widgets/drawer.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/drawer_signup.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -11,6 +15,30 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   bool passwordIsHidden = false;
+  final authHandler = FirebaseProvider();
+
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+
+  void _checkIfEmptyOrNotAndSignInClient(BuildContext context) {
+    String email, pass;
+    final scaffold = ScaffoldMessenger.of(context);
+
+    email = emailTextController.text;
+    pass = passwordTextController.text;
+
+    if (email == "" && pass == "") {
+      scaffold.showSnackBar(
+        SnackBar(
+          content: const Text("Please fill in the forms"),
+          action: SnackBarAction(
+              label: "Undo", onPressed: scaffold.hideCurrentSnackBar),
+        ),
+      );
+    } else {
+      authHandler.handleSignIn(email, pass, context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +47,7 @@ class _AuthPageState extends State<AuthPage> {
 
     return Scaffold(
       drawer: const Drawer(
-        child: DrawerItem(),
+        child: DrawerSignUpItem(),
       ),
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
@@ -62,6 +90,7 @@ class _AuthPageState extends State<AuthPage> {
                     width: 250,
                     child: TextFormField(
                       keyboardType: TextInputType.text,
+                      controller: emailTextController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -84,6 +113,7 @@ class _AuthPageState extends State<AuthPage> {
                     child: TextFormField(
                       keyboardType: TextInputType.text,
                       obscureText: !passwordIsHidden,
+                      controller: passwordTextController,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -130,8 +160,7 @@ class _AuthPageState extends State<AuthPage> {
           width: 200,
           child: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ReceptHomeScreen()));
+              _checkIfEmptyOrNotAndSignInClient(context);
             },
             label: const Text("Log in"),
             icon: const Icon(Icons.login),
