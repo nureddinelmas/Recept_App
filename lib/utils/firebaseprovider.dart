@@ -5,17 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recept_app/utils/utils.dart';
+import 'package:recept_app/utils/client.dart';
 
 class FirebaseProvider {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final utils = Utils();
+  final client = Client();
+  final String? foodSearch = "popular";
+  late final api =
+      "https://api.edamam.com/api/recipes/v2?type=public&q=$foodSearch&app_id=0cceac24&app_key=53899a67af0e3367cf30b5d85f5de4ac";
 
   Future<User> handleSignUp(
       String email, String password, String confirmPass) async {
     UserCredential result = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
     final User user = result.user!;
+    connectClientWithApi(client);
     return user;
   }
 
@@ -47,5 +53,19 @@ class FirebaseProvider {
       utils.snackbar(context, "Email does not exist");
     }
     return null!;
+  }
+
+  void connectClientWithApi(Client client) {
+    auth.authStateChanges().listen((User? user) async {
+      if (user != null) {
+        client.clientID = user.uid;
+        final mapOfClient = <String, dynamic>{
+          "clientmail": user.email,
+          "clientID": client.clientID,
+          "clientApi": api,
+        };
+        await db.collection("users").doc(client.clientID).set(mapOfClient);
+      }
+    });
   }
 }
