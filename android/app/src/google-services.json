@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "270327375018",
+    "project_id": "foodly-dbed9",
+    "storage_bucket": "foodly-dbed9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:270327375018:android:8e8d30b0458cd1829cdcd3",
+        "android_client_info": {
+          "package_name": "com.example.recept_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "270327375018-74reqp1127e6fkmdoh0u0o3i68jfi4v7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtQfqd4v5FU6MuBZ7U8kzxARvjtJTQ_rQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "270327375018-74reqp1127e6fkmdoh0u0o3i68jfi4v7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

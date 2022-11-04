@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:recept_app/main_widgets/recept_home.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:recept_app/minor_widgets/search.dart';
-import 'package:recept_app/widgets/drawer.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/drawer_signup.dart';
+import 'package:recept_app/widgets/textformfield_email.dart';
+import "package:recept_app/widgets/textformfield_pass.dart";
+import 'package:recept_app/utils/utils.dart';
 
 class AuthPage extends StatefulWidget {
-  const AuthPage({Key? key}) : super(key: key);
+  const AuthPage({super.key});
 
   @override
   State<AuthPage> createState() => _AuthPageState();
@@ -13,6 +14,24 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> {
   bool passwordIsHidden = false;
+  final authHandler = FirebaseProvider();
+  final snackbar = Utils();
+
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+
+  void _checkIfEmptyOrNotAndSignInClient(BuildContext context) {
+    String email, pass;
+
+    email = emailTextController.text;
+    pass = passwordTextController.text;
+
+    if (email == "" && pass == "") {
+      snackbar.snackbar(context, "Please fill in the forms");
+    } else {
+      authHandler.handleSignIn(email, pass, context);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +40,7 @@ class _AuthPageState extends State<AuthPage> {
 
     return Scaffold(
       drawer: const Drawer(
-        child: DrawerItem(),
+        child: DrawerSignUpItem(),
       ),
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
@@ -60,60 +79,24 @@ class _AuthPageState extends State<AuthPage> {
                   const Padding(
                     padding: EdgeInsets.only(top: 50.0),
                   ),
-                  SizedBox(
-                    width: 250,
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: "Email",
-                        suffixIcon: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.mail,
-                            color: Colors.blueGrey,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                  TextFormFieldWidgetEmail(emailTextController),
                   const Padding(
                     padding: EdgeInsets.only(top: 10.0),
                   ),
-                  SizedBox(
-                    width: 250,
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      obscureText: !passwordIsHidden,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        labelText: "Password",
-                        suffixIcon: IconButton(
-                          icon: Icon(passwordIsHidden
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                          color: passwordIsHidden ? Colors.green : Colors.grey,
-                          onPressed: () {
-                            setState(() {
-                              passwordIsHidden = !passwordIsHidden;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+                  TextFormFieldPass(passwordTextController, passwordIsHidden),
                   const Padding(
                     padding: EdgeInsets.only(top: 30.0),
                   ),
                   GestureDetector(
-                    child: const Text(
-                      "Forgot Password?",
-                      style:
-                          TextStyle(color: Colors.white, fontFamily: "Times"),
-                    ),
-                  ),
+                      child: const Text(
+                        "Forgot Password?",
+                        style:
+                            TextStyle(color: Colors.white, fontFamily: "Times"),
+                      ),
+                      onTap: () {
+                        authHandler.handleForgotPassword(
+                            emailTextController.text, context);
+                      }),
                   const Divider(
                     thickness: 2,
                     indent: 100,
@@ -132,11 +115,7 @@ class _AuthPageState extends State<AuthPage> {
           width: 200,
           child: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReceptHomeScreen(),
-                  ));
+              _checkIfEmptyOrNotAndSignInClient(context);
             },
             label: const Text("Log in"),
             icon: const Icon(Icons.login),

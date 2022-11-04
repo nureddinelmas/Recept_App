@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:recept_app/main_widgets/recept_home.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
