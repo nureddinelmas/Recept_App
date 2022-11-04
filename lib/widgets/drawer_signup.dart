@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/textformfield_email.dart';
 import "package:recept_app/widgets/textformfield_pass.dart";
+import "package:recept_app/widgets/textformfield_confirm.dart";
 
 class DrawerSignUpItem extends StatefulWidget {
   const DrawerSignUpItem({Key? key}) : super(key: key);
@@ -102,34 +103,8 @@ class _DrawerSignUpItemState extends State<DrawerSignUpItem> {
               const Padding(
                 padding: EdgeInsets.only(top: 10.0),
               ),
-              SizedBox(
-                width: 250,
-                child: TextFormField(
-                  keyboardType: TextInputType.text,
-                  obscureText: !confirmPasswordIsHidden,
-                  controller: confirmPassController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    labelText: "Confirm Password",
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          confirmPasswordIsHidden = !confirmPasswordIsHidden;
-                        });
-                      },
-                      icon: Icon(
-                        confirmPasswordIsHidden
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        color: confirmPasswordIsHidden
-                            ? Colors.green
-                            : Colors.grey,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              TextFormFieldConfirmPass(
+                  confirmPassController, confirmPasswordIsHidden)
             ],
           ),
           const Padding(
