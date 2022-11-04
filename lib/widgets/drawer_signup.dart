@@ -3,6 +3,7 @@ import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/textformfield_email.dart';
 import "package:recept_app/widgets/textformfield_pass.dart";
 import "package:recept_app/widgets/textformfield_confirm.dart";
+import 'package:recept_app/utils/utils.dart';
 
 class DrawerSignUpItem extends StatefulWidget {
   const DrawerSignUpItem({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class _DrawerSignUpItemState extends State<DrawerSignUpItem> {
   bool confirmPasswordIsHidden = false;
 
   final authHandler = FirebaseProvider();
+  final snackbar = Utils();
 
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -23,20 +25,13 @@ class _DrawerSignUpItemState extends State<DrawerSignUpItem> {
 
   void _checkIfEmptyOrNot(BuildContext context) {
     String email, pass, confirmPass;
-    final scaffold = ScaffoldMessenger.of(context);
 
     email = emailTextController.text;
     pass = passwordTextController.text;
     confirmPass = confirmPassController.text;
 
     if (email == "" && pass == "" && confirmPass == "") {
-      scaffold.showSnackBar(
-        SnackBar(
-          content: const Text("Please fill the forms"),
-          action: SnackBarAction(
-              label: "Undo", onPressed: scaffold.hideCurrentSnackBar),
-        ),
-      );
+      snackbar.snackbar(context, "Please fill in the forms");
     } else {
       authHandler.handleSignUp(email, pass, confirmPass);
     }

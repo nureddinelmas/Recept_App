@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recept_app/main_widgets/recept_home.dart';
+import "package:recept_app/utils/clientprovider.dart";
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -9,6 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final clientProvider = ClientProvider();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,8 +21,20 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: const Center(
-        child: Text("Merhaba"),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(
+                onPressed: () {
+                  clientProvider.clientProvider();
+                },
+                child: const Icon(Icons.person_add),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
