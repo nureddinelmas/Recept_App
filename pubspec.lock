@@ -71,6 +71,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.6"
   fake_async:
     dependency: transitive
     description:
@@ -158,11 +165,21 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+
+  http:
+    dependency: "direct main"
+    description:
+      name: http
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.13.5"
+
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+
   http_parser:
     dependency: transitive
     description:
@@ -170,6 +187,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.2"
+
+
   intl:
     dependency: transitive
     description:
@@ -184,6 +203,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
+
   lints:
     dependency: transitive
     description:
@@ -245,6 +265,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0"
+  staggered_grid_view_flutter:
+    dependency: "direct main"
+    description:
+      name: staggered_grid_view_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   stream_channel:
     dependency: transitive
     description:
@@ -272,7 +299,9 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
+
     version: "0.4.12"
+
   typed_data:
     dependency: transitive
     description:
@@ -290,3 +319,4 @@ packages:
 sdks:
   dart: ">=2.17.6 <3.0.0"
   flutter: ">=1.20.0"
+

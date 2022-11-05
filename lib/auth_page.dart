@@ -115,7 +115,15 @@ class _AuthPageState extends State<AuthPage> {
           width: 200,
           child: FloatingActionButton.extended(
             onPressed: () {
+
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReceptHomeScreen(),
+                  ));
+
               _checkIfEmptyOrNotAndSignInClient(context);
+
             },
             label: const Text("Log in"),
             icon: const Icon(Icons.login),
