@@ -132,7 +132,7 @@ class _AuthPageState extends State<AuthPage> {
           width: 200,
           child: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const ReceptHomeScreen(),
