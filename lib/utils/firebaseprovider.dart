@@ -30,7 +30,7 @@ class FirebaseProvider {
       UserCredential result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       final User user = result.user!;
-      Navigator.of(context).push(
+      Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const ReceptHomeScreen()));
       return user;
     } on FirebaseAuthException catch (e) {
