@@ -5,6 +5,8 @@ import 'package:recept_app/widgets/textformfield_email.dart';
 import "package:recept_app/widgets/textformfield_pass.dart";
 import 'package:recept_app/utils/utils.dart';
 
+import 'main_widgets/recept_home.dart';
+
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
@@ -115,15 +117,7 @@ class _AuthPageState extends State<AuthPage> {
           width: 200,
           child: FloatingActionButton.extended(
             onPressed: () {
-
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ReceptHomeScreen(),
-                  ));
-
               _checkIfEmptyOrNotAndSignInClient(context);
-
             },
             label: const Text("Log in"),
             icon: const Icon(Icons.login),
