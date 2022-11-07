@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/home.dart';
+import 'package:recept_app/screens/favorite_screen.dart';
 
 class ReceptHomeScreen extends StatefulWidget {
   const ReceptHomeScreen({Key? key}) : super(key: key);
@@ -13,9 +14,7 @@ class _ReceptHomeScreenState extends State<ReceptHomeScreen> {
 
   final List<Widget> tabs = const [
     HomeScreen(),
-    Center(
-      child: Text("Favorite Screen"),
-    ),
+    FavoriteScreen(),
     Center(
       child: Text("New Recipe Screen"),
     ),
