@@ -5,14 +5,14 @@ import 'package:recept_app/widgets/textformfield_email.dart';
 import "package:recept_app/widgets/textformfield_pass.dart";
 import 'package:recept_app/utils/utils.dart';
 
-class AuthPage extends StatefulWidget {
-  const AuthPage({super.key});
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
 
   @override
-  State<AuthPage> createState() => _AuthPageState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthPageState extends State<AuthPage> {
+class _AuthScreenState extends State<AuthScreen> {
   bool passwordIsHidden = false;
   final authHandler = FirebaseProvider();
   final snackbar = Utils();
