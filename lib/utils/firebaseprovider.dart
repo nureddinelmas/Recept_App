@@ -68,4 +68,23 @@ class FirebaseProvider {
       }
     });
   }
+
+  String getCurrentUserApiKey(Client client) {
+    auth.authStateChanges().listen((User? user) async {
+      if (user != null) {
+        await db.collection("users").doc(user.uid).get().then((document) {
+          if (document.exists) {
+            client.clientApiKey = document.get("clientApi");
+          }
+        });
+      }
+    });
+    return client.clientApiKey;
+  }
+
+  void addToFavorite(Client client) {
+    auth.authStateChanges().listen((User? user) async {
+      if (user != null) {}
+    });
+  }
 }
