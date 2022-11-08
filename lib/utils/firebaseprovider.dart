@@ -69,7 +69,7 @@ class FirebaseProvider {
     });
   }
 
-  String getClientField(String collection) {
+  String getClientApi(String collection) {
     auth.authStateChanges().listen((User? user) async {
       if (user != null) {
         await db.collection(collection).doc(user.uid).get().then((document) {
@@ -82,15 +82,37 @@ class FirebaseProvider {
     return client.clientApiKey;
   }
 
-  void addToFavorite(dynamic model) {
+  void addToFavorite(dynamic model, dynamic url) {
     auth.authStateChanges().listen((User? user) async {
       if (user != null) {
-        final mapOfFavorites = <String, dynamic>{"favorite": model};
+        final mapOfFavorites = <String, dynamic>{"favorite": model, "web": url};
         await db
             .collection("userFavorites")
             .doc(user.uid)
             .collection("favorites")
-            .add(mapOfFavorites);
+            .doc(user.tenantId)
+            .set(mapOfFavorites);
+        listenForFavorites();
+      }
+    });
+  }
+
+  void listenForFavorites() {
+    auth.authStateChanges().listen((User? user) async {
+      if (user != null) {
+        db
+            .collection("userFavorites")
+            .doc(user.uid)
+            .collection("favorites")
+            .where("favorites", isEqualTo: user.tenantId)
+            .snapshots()
+            .listen((event) {
+          final favorite = [];
+          for (var doc in event.docs) {
+            favorite.add(doc.data()["web"]);
+            print(favorite);
+          }
+        });
       }
     });
   }

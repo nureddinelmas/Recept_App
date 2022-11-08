@@ -99,7 +99,8 @@ class Build extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () {
-                                firebaseProvider.addToFavorite(modell['image']);
+                                firebaseProvider.addToFavorite(
+                                    modell['images']['REGULAR'], modell['url']);
                               },
                               icon: Icon(Icons.favorite_border,
                                   color: Colors.red),
