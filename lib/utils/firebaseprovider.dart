@@ -69,10 +69,10 @@ class FirebaseProvider {
     });
   }
 
-  String getCurrentUserApiKey(Client client) {
+  String getClientField(String collection) {
     auth.authStateChanges().listen((User? user) async {
       if (user != null) {
-        await db.collection("users").doc(user.uid).get().then((document) {
+        await db.collection(collection).doc(user.uid).get().then((document) {
           if (document.exists) {
             client.clientApiKey = document.get("clientApi");
           }
@@ -82,9 +82,16 @@ class FirebaseProvider {
     return client.clientApiKey;
   }
 
-  void addToFavorite(Client client) {
+  void addToFavorite(dynamic model) {
     auth.authStateChanges().listen((User? user) async {
-      if (user != null) {}
+      if (user != null) {
+        final mapOfFavorites = <String, dynamic>{"favorite": model};
+        await db
+            .collection("userFavorites")
+            .doc(user.uid)
+            .collection("favorites")
+            .add(mapOfFavorites);
+      }
     });
   }
 }

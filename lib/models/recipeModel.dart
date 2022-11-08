@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'dart:convert';
 import "package:http/http.dart" as http;
 
@@ -494,25 +493,23 @@ class EnumValues<T> {
   }
 }
 
+Future<List> getUsers() async {
+  List<RecipeModel> _list = [];
+  List list1 = [];
+  List list2 = [];
+  const url =
+      "https://api.edamam.com/api/recipes/v2?type=public&q=popular&app_id=062e2906&app_key=ab4f8a9c1b6ba8b2b72c475829e7f354";
+  final response = await http.get(Uri.parse(url));
 
- Future<List> getUsers() async {
-    List<RecipeModel> _list = [];
-    List list1 = [];
-    List list2 = [];
-    const url =
-        "https://api.edamam.com/api/recipes/v2?type=public&q=popular&app_id=062e2906&app_key=ab4f8a9c1b6ba8b2b72c475829e7f354";
-    final response = await http.get(Uri.parse(url));
+  final body = json.decode(response.body)['hits'];
 
-    final body = json.decode(response.body)['hits'];
+  for (var item in body) {
+    list1.add(item['recipe']);
 
-    for (var item in body) {
-     
-      list1.add(item['recipe']);
-
-      list1.forEach((element) {
-        list2.add(element);
-      });
-    }
-   
-    return list2;
+    list1.forEach((element) {
+      list2.add(element);
+    });
   }
+
+  return list2;
+}

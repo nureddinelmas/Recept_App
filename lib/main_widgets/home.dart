@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:recept_app/minor_widgets/fake_search.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import '../models/recipeModel.dart';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -45,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class Build extends StatelessWidget {
   final List model;
-  const Build({Key? key, required this.model}) : super(key: key);
+  final firebaseProvider = FirebaseProvider();
+  Build({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +97,12 @@ class Build extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            const Icon(
-                              Icons.favorite_border_rounded,
-                              color: Colors.red,
+                            IconButton(
+                              onPressed: () {
+                                firebaseProvider.addToFavorite(modell['image']);
+                              },
+                              icon: Icon(Icons.favorite_border,
+                                  color: Colors.red),
                             ),
                           ],
                         ),
