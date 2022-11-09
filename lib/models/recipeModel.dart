@@ -494,25 +494,22 @@ class EnumValues<T> {
   }
 }
 
+Future<List> getRecipes(String q) async {
+  List list1 = [];
+  List list2 = [];
+  var url =
+      "https://api.edamam.com/api/recipes/v2?type=public&q=$q&app_id=062e2906&app_key=ab4f8a9c1b6ba8b2b72c475829e7f354";
+  final response = await http.get(Uri.parse(url));
 
- Future<List> getUsers(String q) async {
+  final body = json.decode(response.body)['hits'];
 
-    List list1 = [];
-    List list2 = [];
-    var url =
-        "https://api.edamam.com/api/recipes/v2?type=public&q=$q&app_id=062e2906&app_key=ab4f8a9c1b6ba8b2b72c475829e7f354";
-    final response = await http.get(Uri.parse(url));
+  for (var item in body) {
+    list1.add(item['recipe']);
 
-    final body = json.decode(response.body)['hits'];
-
-    for (var item in body) {
-     
-      list1.add(item['recipe']);
-
-      list1.forEach((element) {
-        list2.add(element);
-      });
-    }
-   
-    return list2;
+    list1.forEach((element) {
+      list2.add(element);
+    });
   }
+
+  return list2;
+}

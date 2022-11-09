@@ -18,7 +18,7 @@ class MainModel extends StatefulWidget {
 class _MainModelState extends State<MainModel> {
   @override
   Widget build(BuildContext context) {
-    Future<List> recipeFuture = getUsers(widget.q);
+    Future<List> recipeFuture = getRecipes(widget.q);
     return Scaffold(
       body: SingleChildScrollView(
         child: FutureBuilder<List>(
