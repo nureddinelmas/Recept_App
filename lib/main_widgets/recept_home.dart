@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:recept_app/models/main_model.dart';
 import 'package:recept_app/main_widgets/main_home.dart';
-
-import 'package:recept_app/main_widgets/home.dart';
 import 'package:recept_app/screens/favorite_screen.dart';
 
 
