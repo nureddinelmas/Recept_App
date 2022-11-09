@@ -24,6 +24,7 @@ class FavoriteRecipes extends StatefulWidget {
 class _FavoriteRecipesState extends State<FavoriteRecipes> {
   final image =
       "https://png.pngtree.com/png-vector/20190917/ourlarge/pngtree-meal-icon-vectors-png-image_1737729.jpg";
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
