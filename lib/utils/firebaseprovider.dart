@@ -29,9 +29,9 @@ class FirebaseProvider {
       UserCredential result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       final User user = result.user!;
+      getUserFavorites();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const ReceptHomeScreen()));
-      //getUserFavorites();
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -93,44 +93,23 @@ class FirebaseProvider {
     }
   }
 
-   getUserFavorites() async {
-    final userFavorites = [];
-    auth.authStateChanges().listen((User? user) async {
-      if (user != null) {
-        await db
-            .collection("userFavorites")
-            .doc(user.uid)
-            .collection("favorites")
-            .get()
-            .then((document) {
-          if (document.docs.isNotEmpty) {
-            userFavorites.add(document.docs);
-            print(userFavorites);
+  void getUserFavorites() async {
+    final favorites = [];
+    if (auth.currentUser?.uid != null) {
+      await db
+          .collection("userFavorites")
+          .doc(auth.currentUser?.uid)
+          .collection("favorites")
+          .get()
+          .then((field) {
+        for (var document in field.docs) {
+          if (document.exists) {
+            final image = document.get("image");
+            favorites.add(image);
+            print(image);
           }
-        });
-      }
-    });
-   
+        }
+      });
+    }
   }
-}
-
-  // List listenForFavorites() {
-  //   final favorite = [];
-  //   db
-  //       .collection("userFavorites")
-  //       .doc(auth.currentUser?.uid)
-  //       .collection("favorites")
-  //       .snapshots()
-  //       .listen((event) {
-  //     for (var doc in event.docs) {
-  //       favorite.clear();
-  //       var image = doc.data()["image"].toString();
-  //       image = image.replaceAll("[", "").replaceAll("]", "");
-  //       favorite.add(image);
-  //       print(favorite);
-  //     }
-  //   });
-  //   return favorite;
-  // }
-
 }

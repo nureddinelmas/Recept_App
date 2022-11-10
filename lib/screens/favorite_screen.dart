@@ -29,28 +29,32 @@ class FavoriteRecipes extends StatefulWidget {
 class _FavoriteRecipesState extends State<FavoriteRecipes> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final recipeImages = [];
+  final List recipeImages = [];
 
-  listenForFavorites() {
-    db
-        .collection("userFavorites")
-        .doc(auth.currentUser?.uid)
-        .collection("favorites")
-        .snapshots()
-        .listen((event) {
-      for (var doc in event.docs) {
-        final image = doc.data()["image"].toString();
+  late final listenForFavorites = db
+      .collection("userFavorites")
+      .doc(auth.currentUser?.uid)
+      .collection("favorites")
+      .snapshots()
+      .listen((event) {
+    for (var doc in event.docs) {
+      final image = doc.data()["image"].toString();
 
-        setState(() {
-          recipeImages.add(image);
-        });
-      }
-    });
+      setState(() {
+        recipeImages.add(image);
+      });
+    }
+  });
+
+  @override
+  initState() {
+    super.initState();
+    listenForFavorites;
   }
 
   @override
   void dispose() {
-    listenForFavorites().dispose();
+    listenForFavorites.cancel();
     super.dispose();
   }
 
@@ -80,9 +84,8 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                     itemCount: recipeImages.length,
                     itemBuilder: (context, itemIndex, pageViewIndex) =>
                         ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
-                      child: Image.network(recipeImages[itemIndex]),
-                    ),
+                            borderRadius: BorderRadius.circular(15.0),
+                            child: Image.network(recipeImages[itemIndex])),
                     options: CarouselOptions(
                       aspectRatio: height / 400,
                       viewportFraction: 0.5,
@@ -90,10 +93,6 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                       enableInfiniteScroll: true,
                       reverse: true,
                       enlargeCenterPage: true,
-                      onPageChanged: (index, reason) {
-                        listenForFavorites();
-                        print(recipeImages);
-                      },
                       scrollDirection: Axis.horizontal,
                     ),
                   ),
