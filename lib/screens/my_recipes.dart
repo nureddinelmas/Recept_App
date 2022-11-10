@@ -24,18 +24,13 @@ class _MyRecipesState extends State<MyRecipes> {
             ),
             Container(
               height: 213,
-              color: Colors.amber,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage('assets/images/CostaBlanca.jpg'),
+              )),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
-            ),
-            const Text(
-              'My recipes!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
@@ -51,6 +46,12 @@ class _MyRecipesState extends State<MyRecipes> {
                       Color(0xFFf6925c),
                       Color(0xFFf37552),
                     ]),
+              ),
+              child: Center(
+                child: Text(
+                  'Add new recipe',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
             )
           ],
