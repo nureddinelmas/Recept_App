@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recept_app/colors.dart';
+import 'package:recept_app/widgets/pageview_my_recipes.dart';
 
 class MyRecipes extends StatefulWidget {
   const MyRecipes({Key? key}) : super(key: key);
@@ -15,15 +16,28 @@ class _MyRecipesState extends State<MyRecipes> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: mrBackgroundColor,
-      body: Padding(
-        padding: const EdgeInsets.all(33),
+      body: SafeArea(
         child: ListView(
+          primary: true,
           children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.1,
+            Padding(
+              padding: const EdgeInsets.all(33),
+              child: Row(
+                children: [
+                  Center(
+                    child: Text(
+                      "My Recipes",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
             ),
+            const SizedBox(height: 16),
+            const PageViewMyRecipes(),
             Container(
-              height: 213,
+              height: 270,
               decoration: BoxDecoration(
                   image: DecorationImage(
                 image: AssetImage('assets/images/CostaBlanca.jpg'),
@@ -31,6 +45,15 @@ class _MyRecipesState extends State<MyRecipes> {
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            const Text(
+              "Världens godaste mozzarellasallad tycker iallafall jag! Vad tycker ni egentligen?",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF0E0E2D),
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.1,
