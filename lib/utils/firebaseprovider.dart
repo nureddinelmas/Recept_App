@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
@@ -21,6 +19,7 @@ class FirebaseProvider {
     UserCredential result = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
     final User user = result.user!;
+    client.clientID = user.uid;
     connectClientWithApi(client);
     return user;
   }
@@ -32,6 +31,7 @@ class FirebaseProvider {
       final User user = result.user!;
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const ReceptHomeScreen()));
+      //getUserFavorites();
       return user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -55,18 +55,14 @@ class FirebaseProvider {
     return null!;
   }
 
-  void connectClientWithApi(Client client) {
-    auth.authStateChanges().listen((User? user) async {
-      if (user != null) {
-        client.clientID = user.uid;
-        final mapOfClient = <String, dynamic>{
-          "clientmail": user.email,
-          "clientID": client.clientID,
-          "clientApi": api,
-        };
-        await db.collection("users").doc(client.clientID).set(mapOfClient);
-      }
-    });
+  void connectClientWithApi(Client client) async {
+    client.clientID = auth.currentUser?.uid as String;
+    final mapOfClient = <String, dynamic>{
+      "clientmail": auth.currentUser?.email,
+      "clientID": client.clientID,
+      "clientApi": api,
+    };
+    await db.collection("users").doc(client.clientID).set(mapOfClient);
   }
 
   String getClientApi(String collection) {
@@ -82,38 +78,59 @@ class FirebaseProvider {
     return client.clientApiKey;
   }
 
-  void addToFavorite(dynamic model, dynamic url) {
+  void addToFavorite(dynamic imageUrl, dynamic webAdress) {
+    if (auth.currentUser?.uid != null) {
+      final mapOfFavorites = <String, dynamic>{
+        "image": imageUrl,
+        "web": webAdress
+      };
+      db
+          .collection("userFavorites")
+          .doc(auth.currentUser?.uid)
+          .collection("favorites")
+          .doc()
+          .set(mapOfFavorites);
+    }
+  }
+
+   getUserFavorites() async {
+    final userFavorites = [];
     auth.authStateChanges().listen((User? user) async {
       if (user != null) {
-        final mapOfFavorites = <String, dynamic>{"favorite": model, "web": url};
         await db
             .collection("userFavorites")
             .doc(user.uid)
             .collection("favorites")
-            .doc(user.tenantId)
-            .set(mapOfFavorites);
-        listenForFavorites();
-      }
-    });
-  }
-
-  void listenForFavorites() {
-    auth.authStateChanges().listen((User? user) async {
-      if (user != null) {
-        db
-            .collection("userFavorites")
-            .doc(user.uid)
-            .collection("favorites")
-            .where("favorites", isEqualTo: user.tenantId)
-            .snapshots()
-            .listen((event) {
-          final favorite = [];
-          for (var doc in event.docs) {
-            favorite.add(doc.data()["web"]);
-            print(favorite);
+            .get()
+            .then((document) {
+          if (document.docs.isNotEmpty) {
+            userFavorites.add(document.docs);
+            print(userFavorites);
           }
         });
       }
     });
+   
   }
+}
+
+  // List listenForFavorites() {
+  //   final favorite = [];
+  //   db
+  //       .collection("userFavorites")
+  //       .doc(auth.currentUser?.uid)
+  //       .collection("favorites")
+  //       .snapshots()
+  //       .listen((event) {
+  //     for (var doc in event.docs) {
+  //       favorite.clear();
+  //       var image = doc.data()["image"].toString();
+  //       image = image.replaceAll("[", "").replaceAll("]", "");
+  //       favorite.add(image);
+  //       print(favorite);
+  //     }
+  //   });
+  //   return favorite;
+  // }
+
 }

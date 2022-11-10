@@ -61,6 +61,7 @@ class Build extends StatefulWidget {
 }
 
 class _BuildState extends State<Build> {
+  final firebaseProvider = FirebaseProvider();
   @override
   Widget build(BuildContext context) {
     return StaggeredGridView.countBuilder(
@@ -121,7 +122,9 @@ class _BuildState extends State<Build> {
                             IconButton(
                               onPressed: () {
                                 firebaseProvider.addToFavorite(
-                                    modell['images']['REGULAR'], modell['url']);
+                                  modell['images']['REGULAR']['url'],
+                                  modell['url'],
+                                );
                               },
                               icon: Icon(Icons.favorite_border,
                                   color: Colors.red),

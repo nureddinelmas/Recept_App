@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/recipe_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final firebaseProvider = FirebaseProvider();
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -22,8 +27,33 @@ class FavoriteRecipes extends StatefulWidget {
 }
 
 class _FavoriteRecipesState extends State<FavoriteRecipes> {
-  final image =
-      "https://png.pngtree.com/png-vector/20190917/ourlarge/pngtree-meal-icon-vectors-png-image_1737729.jpg";
+  final db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final recipeImages = [];
+
+  listenForFavorites() {
+    db
+        .collection("userFavorites")
+        .doc(auth.currentUser?.uid)
+        .collection("favorites")
+        .snapshots()
+        .listen((event) {
+      for (var doc in event.docs) {
+        final image = doc.data()["image"].toString();
+
+        setState(() {
+          recipeImages.add(image);
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    listenForFavorites().dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -47,12 +77,11 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                     color: Colors.grey,
                   ),
                   child: CarouselSlider.builder(
-                    itemCount: 15,
-                    itemBuilder: (BuildContext context, int itemIndex,
-                            int pageViewIndex) =>
+                    itemCount: recipeImages.length,
+                    itemBuilder: (context, itemIndex, pageViewIndex) =>
                         ClipRRect(
                       borderRadius: BorderRadius.circular(15.0),
-                      child: Image.network(image),
+                      child: Image.network(recipeImages[itemIndex]),
                     ),
                     options: CarouselOptions(
                       aspectRatio: height / 400,
@@ -61,7 +90,10 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                       enableInfiniteScroll: true,
                       reverse: true,
                       enlargeCenterPage: true,
-                      // onPageChanged: (callbackFunction),
+                      onPageChanged: (index, reason) {
+                        listenForFavorites();
+                        print(recipeImages);
+                      },
                       scrollDirection: Axis.horizontal,
                     ),
                   ),
