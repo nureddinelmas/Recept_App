@@ -111,4 +111,38 @@ class FirebaseProvider {
       });
     }
   }
+
+  void addToFavorite(dynamic imageUrl, dynamic webAdress) {
+    if (auth.currentUser?.uid != null) {
+      final mapOfFavorites = <String, dynamic>{
+        "image": imageUrl,
+        "web": webAdress
+      };
+      db
+          .collection("userFavorites")
+          .doc(auth.currentUser?.uid)
+          .collection("favorites")
+          .doc()
+          .set(mapOfFavorites);
+    }
+  }
+
+  void getUserFavorites() async {
+    final favorites = [];
+    if (auth.currentUser?.uid != null) {
+      await db
+          .collection("userFavorites")
+          .doc(auth.currentUser?.uid)
+          .collection("favorites")
+          .get()
+          .then((documents) {
+        for (var document in documents.docs) {
+          if (document.exists) {
+            final image = document.get("image");
+            favorites.add(image);
+          }
+        }
+      });
+    }
+  }
 }
