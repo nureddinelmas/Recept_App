@@ -101,12 +101,11 @@ class FirebaseProvider {
           .doc(auth.currentUser?.uid)
           .collection("favorites")
           .get()
-          .then((field) {
-        for (var document in field.docs) {
+          .then((documents) {
+        for (var document in documents.docs) {
           if (document.exists) {
             final image = document.get("image");
             favorites.add(image);
-            print(image);
           }
         }
       });

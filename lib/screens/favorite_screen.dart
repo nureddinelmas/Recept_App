@@ -39,7 +39,6 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
       .listen((event) {
     for (var doc in event.docs) {
       final image = doc.data()["image"].toString();
-
       setState(() {
         recipeImages.add(image);
       });
@@ -65,62 +64,59 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
     double heightCarousel = height * 0.32;
 
     return Scaffold(
-      body: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 50),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: width,
-                height: heightCarousel,
-                child: DecoratedBox(
-                  decoration: const BoxDecoration(
-                    color: Colors.grey,
-                  ),
-                  child: CarouselSlider.builder(
-                    itemCount: recipeImages.length,
-                    itemBuilder: (context, itemIndex, pageViewIndex) =>
-                        ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Image.network(recipeImages[itemIndex])),
-                    options: CarouselOptions(
-                      aspectRatio: height / 400,
-                      viewportFraction: 0.5,
-                      initialPage: 0,
-                      enableInfiniteScroll: true,
-                      reverse: true,
-                      enlargeCenterPage: true,
-                      scrollDirection: Axis.horizontal,
-                    ),
-                  ),
+      body: Column(children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 50),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: width,
+              height: heightCarousel,
+              child: DecoratedBox(
+                decoration: const BoxDecoration(
+                  color: Colors.grey,
                 ),
-              ),
-            ],
-          ),
-          const Padding(padding: EdgeInsets.only(top: 3)),
-          SizedBox(
-            width: width * 0.99,
-            height: height * 0.50,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.blueGrey,
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(
-                    10,
-                    (index) => const RecipeCard(),
+                child: CarouselSlider.builder(
+                  itemCount: recipeImages.length,
+                  itemBuilder: (context, itemIndex, pageViewIndex) => ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Image.network(recipeImages[itemIndex])),
+                  options: CarouselOptions(
+                    aspectRatio: height / 400,
+                    viewportFraction: 0.5,
+                    initialPage: 0,
+                    enableInfiniteScroll: true,
+                    reverse: true,
+                    enlargeCenterPage: true,
+                    scrollDirection: Axis.horizontal,
                   ),
                 ),
               ),
             ),
+          ],
+        ),
+        const Padding(padding: EdgeInsets.only(top: 3)),
+        SizedBox(
+          width: width * 0.99,
+          height: height * 0.50,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: Colors.blueGrey,
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: List.generate(
+                  recipeImages.length,
+                  (index) => const RecipeCard(),
+                ),
+              ),
+            ),
           ),
-        ],
-      ),
+        )
+      ]),
     );
   }
 }

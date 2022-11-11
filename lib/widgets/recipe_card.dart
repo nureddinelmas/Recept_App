@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RecipeCard extends StatefulWidget {
@@ -8,6 +10,47 @@ class RecipeCard extends StatefulWidget {
 }
 
 class _RecipeCardState extends State<RecipeCard> {
+  final db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final List recipeImages = [];
+
+  late final listenForFavorites = db
+      .collection("userFavorites")
+      .doc(auth.currentUser?.uid)
+      .collection("favorites")
+      .snapshots()
+      .listen((event) {
+    var tmpList = [];
+    for (var doc in event.docs) {
+      tmpList.add(doc.data()["image"].toString());
+    }
+    setState(() {
+      recipeImages.clear();
+      recipeImages.addAll(tmpList);
+    });
+  });
+
+  Widget? getImages(List<dynamic> images) {
+    for (var i = 0; i < recipeImages.length; i++) {
+      recipeImages.add(Image.network(recipeImages[i]));
+
+      return Image.network(recipeImages[i]);
+    }
+    return null;
+  }
+
+  @override
+  initState() {
+    super.initState();
+    listenForFavorites;
+  }
+
+  @override
+  void dispose() {
+    listenForFavorites.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,8 +72,7 @@ class _RecipeCardState extends State<RecipeCard> {
               child: CircleAvatar(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                      "https://png.pngtree.com/png-vector/20190917/ourlarge/pngtree-meal-icon-vectors-png-image_1737729.jpg"),
+                  child: getImages(recipeImages), //!
                 ),
               ),
             ),
