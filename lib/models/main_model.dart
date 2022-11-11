@@ -1,9 +1,11 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:recept_app/minor_widgets/fake_search.dart';
 import 'package:recept_app/minor_widgets/recipe_details.dart';
+
 import 'package:recept_app/screens/favorite_screen.dart';
+
+
 import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
@@ -64,6 +66,7 @@ class Build extends StatefulWidget {
 }
 
 class _BuildState extends State<Build> {
+  final firebaseProvider = FirebaseProvider();
   @override
   Widget build(BuildContext context) {
     return StaggeredGridView.countBuilder(
@@ -122,6 +125,7 @@ class _BuildState extends State<Build> {
                               ),
                             ),
                             IconButton(
+
                                 onPressed: () {
                                   firebaseProvider.addToFavorite(
                                     modell['images']['REGULAR']['url'],
@@ -132,6 +136,8 @@ class _BuildState extends State<Build> {
                                   Icons.favorite_border,
                                   color: Colors.red,
                                 ))
+
+                              
                           ],
                         ),
                       ),

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
@@ -21,6 +19,7 @@ class FirebaseProvider {
     UserCredential result = await auth.createUserWithEmailAndPassword(
         email: email, password: password);
     final User user = result.user!;
+    client.clientID = user.uid;
     connectClientWithApi(client);
     return user;
   }
@@ -30,6 +29,7 @@ class FirebaseProvider {
       UserCredential result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       final User user = result.user!;
+      getUserFavorites();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const ReceptHomeScreen()));
       return user;
@@ -55,18 +55,61 @@ class FirebaseProvider {
     return null!;
   }
 
-  void connectClientWithApi(Client client) {
+  void connectClientWithApi(Client client) async {
+    client.clientID = auth.currentUser?.uid as String;
+    final mapOfClient = <String, dynamic>{
+      "clientmail": auth.currentUser?.email,
+      "clientID": client.clientID,
+      "clientApi": api,
+    };
+    await db.collection("users").doc(client.clientID).set(mapOfClient);
+  }
+
+  String getClientApi(String collection) {
     auth.authStateChanges().listen((User? user) async {
       if (user != null) {
-        client.clientID = user.uid;
-        final mapOfClient = <String, dynamic>{
-          "clientmail": user.email,
-          "clientID": client.clientID,
-          "clientApi": api,
-        };
-        await db.collection("users").doc(client.clientID).set(mapOfClient);
+        await db.collection(collection).doc(user.uid).get().then((document) {
+          if (document.exists) {
+            client.clientApiKey = document.get("clientApi");
+          }
+        });
       }
     });
+    return client.clientApiKey;
+  }
+
+  void addToFavorite(dynamic imageUrl, dynamic webAdress) {
+    if (auth.currentUser?.uid != null) {
+      final mapOfFavorites = <String, dynamic>{
+        "image": imageUrl,
+        "web": webAdress
+      };
+      db
+          .collection("userFavorites")
+          .doc(auth.currentUser?.uid)
+          .collection("favorites")
+          .doc()
+          .set(mapOfFavorites);
+    }
+  }
+
+  void getUserFavorites() async {
+    final favorites = [];
+    if (auth.currentUser?.uid != null) {
+      await db
+          .collection("userFavorites")
+          .doc(auth.currentUser?.uid)
+          .collection("favorites")
+          .get()
+          .then((documents) {
+        for (var document in documents.docs) {
+          if (document.exists) {
+            final image = document.get("image");
+            favorites.add(image);
+          }
+        }
+      });
+    }
   }
 
   void addToFavorite(dynamic imageUrl, dynamic webAdress) {
