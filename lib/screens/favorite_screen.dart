@@ -30,6 +30,9 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List recipeImages = [];
+  final List labels = [];
+  final List sources = [];
+  final List cuisineTypes = [];
 
   late final listenForFavorites = db
       .collection("userFavorites")
@@ -39,8 +42,14 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
       .listen((event) {
     for (var doc in event.docs) {
       final image = doc.data()["image"].toString();
+      final label = doc.data()["label"].toString();
+      final source = doc.data()["source"].toString();
+      final cuisineType = doc.data()["cuisineType"].toString();
       setState(() {
         recipeImages.add(image);
+        labels.add(label);
+        sources.add(source);
+        cuisineTypes.add(cuisineType);
       });
     }
   });
@@ -82,7 +91,12 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                   itemCount: recipeImages.length,
                   itemBuilder: (context, itemIndex, pageViewIndex) => ClipRRect(
                       borderRadius: BorderRadius.circular(15.0),
-                      child: Image.network(recipeImages[itemIndex])),
+                      child: GestureDetector(
+                        onTap: () {
+                          //!
+                        },
+                        child: Image.network(recipeImages[itemIndex]),
+                      )),
                   options: CarouselOptions(
                     aspectRatio: height / 400,
                     viewportFraction: 0.5,
@@ -109,9 +123,13 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
             child: SingleChildScrollView(
               child: Column(
                 children: List.generate(
-                  recipeImages.length,
-                  (index) => const RecipeCard(),
-                ),
+                    recipeImages.length,
+                    (index) => RecipeCard(
+                          urlImage: recipeImages[index],
+                          label: labels[index],
+                          source: sources[index],
+                          cuisineType: cuisineTypes[index],
+                        )),
               ),
             ),
           ),
