@@ -832,6 +832,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
+
   cloud_firestore: 345ab5f423db6ae492abb648372156bdccb9df42
   Firebase: 444b35a9c568a516666213c2f6cccd10cb12559f
   firebase_analytics: 83faeaf890b32aec4537dd4ae714001b4fbc8619
@@ -842,6 +843,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 55e7ae35991ccca4db03ff8d8df6ed5f17a3e4c7
   FirebaseCoreInternal: 96d75228e10fd369564da51bd898414eb0f54df5
   FirebaseFirestore: d482e5e0f95dba8ef5d499a7efa87ba2f56ef0c0
+
   FirebaseInstallations: 99d24bac0243cf8b0e96cf5426340d211f0bcc80
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   GoogleAppMeasurement: e490e248af3da95afe8fa8e7baac232dc8d020b7
