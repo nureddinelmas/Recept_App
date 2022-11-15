@@ -88,7 +88,7 @@ class FirebaseProvider {
         "label": label,
         "source": source,
         "cuisineType": cuisineType,
-        "isFavorite": false
+        "isFavorite": true
       };
       db
           .collection("userFavorites")
@@ -99,20 +99,14 @@ class FirebaseProvider {
     }
   }
 
-  void updateUserFavorite(isFavorite) async {
+  void updateUserFavorite() async {
     if (auth.currentUser?.uid != null) {
       await db
           .collection("userFavorites")
           .doc(auth.currentUser?.uid)
           .collection("favorites")
-          .get()
-          .then((documents) {
-        for (var document in documents.docs) {
-          if (document.exists) {
-            final favorite = document.get("image");
-          }
-        }
-      });
+          .doc().update({"isFavorite"})
+          
     }
   }
 
