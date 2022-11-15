@@ -1,54 +1,41 @@
 import 'package:flutter/material.dart';
-
 import 'package:recept_app/minor_widgets/fake_search.dart';
-import 'package:recept_app/minor_widgets/recipe_details.dart';
-
-import 'package:recept_app/screens/favorite_screen.dart';
-
-
 import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
-import 'recipeModel.dart';
+import '../models/recipeModel.dart';
 
-class MainModel extends StatefulWidget {
-  final String q;
-  const MainModel({Key? key, required this.q}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<MainModel> createState() => _MainModelState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MainModelState extends State<MainModel> {
-  final firebaseProvider = FirebaseProvider();
+class _HomeScreenState extends State<HomeScreen> {
+
+  Future<List> recipeFuture = getRecipes("");
+
+ 
+
   @override
   Widget build(BuildContext context) {
-    Future<List> recipeFuture = getRecipes(widget.q);
     return Scaffold(
+      appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          title: const FakeSearch()),
       body: SingleChildScrollView(
         child: FutureBuilder<List>(
           future: recipeFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 100),
-                child: Center(
-                    child: CircularProgressIndicator(
-                  semanticsLabel: "Loading...",
-                )),
-              );
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasData) {
               final modell = snapshot.data!;
               return Build(model: modell);
             } else {
-              return const Padding(
-                padding: EdgeInsets.only(top: 100),
-                child: Center(
-                    child: Text(
-                  "There is no data",
-                  style: TextStyle(fontSize: 30),
-                )),
-              );
+              return const Text("There is no data");
             }
           },
         ),
@@ -57,25 +44,20 @@ class _MainModelState extends State<MainModel> {
   }
 }
 
-class Build extends StatefulWidget {
+class Build extends StatelessWidget {
   final List model;
-  const Build({Key? key, required this.model}) : super(key: key);
-
-  @override
-  State<Build> createState() => _BuildState();
-}
-
-class _BuildState extends State<Build> {
   final firebaseProvider = FirebaseProvider();
+  Build({Key? key, required this.model}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StaggeredGridView.countBuilder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: widget.model.length,
+      itemCount: model.length,
       crossAxisCount: 2,
       itemBuilder: (context, index) {
-        final modell = widget.model[index];
+        final modell = model[index];
         return Stack(
           children: [
             Padding(
@@ -92,14 +74,7 @@ class _BuildState extends State<Build> {
                   child: Column(
                     children: [
                       InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    RecipeDetailsScreen(recipe: modell),
-                              ));
-                        },
+                        onTap: () {},
                         child: Container(
                           constraints: const BoxConstraints(
                               minHeight: 100, maxHeight: 250),
@@ -125,19 +100,12 @@ class _BuildState extends State<Build> {
                               ),
                             ),
                             IconButton(
-
-                                onPressed: () {
-                                  firebaseProvider.addToFavorite(
-                                    modell['images']['REGULAR']['url'],
-                                    modell['url'],
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.red,
-                                ))
-
-                              
+                              onPressed: () {
+                                //!
+                              },
+                              icon: Icon(Icons.favorite_border,
+                                  color: Colors.red),
+                            ),
                           ],
                         ),
                       ),

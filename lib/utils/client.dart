@@ -1,6 +1,7 @@
 class Client {
-  String clienEmail = "";
-  String clientPassword = "";
+  String clientEmail = "";
   String clientID = "";
   String clientApiKey = "";
+  String clientPassword = "";
+  String favoriteID = "";
 }
