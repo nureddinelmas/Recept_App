@@ -4,11 +4,13 @@ class Recipe {
   Recipe(
       {this.recipeName = '',
       this.recipeImage = '',
-      this.recipeDescription = ''});
+      this.recipeDescription = '',
+      this.recipeIngredients = ''});
 
   String recipeName;
   String recipeImage;
   String recipeDescription;
+  String recipeIngredients;
 }
 
 var recipes = [
@@ -16,17 +18,20 @@ var recipes = [
       recipeName: "Godaste fisken",
       recipeImage: 'CostaBlanca.jpg',
       recipeDescription:
-          'Häll i fisken och massa vatten, låt koka i 200 minuter'),
+          'Häll i fisken och massa vatten, låt koka i 200 minuter',
+      recipeIngredients: '4 äpplen, 3 päron, 2 tomater'),
   Recipe(
       recipeName: "Godaste grytan",
       recipeImage: 'Snake1.jpeg',
       recipeDescription:
-          'Häll i alla ingredienser, rör runt ordentligt och krydda sen. Ät med ris'),
+          'Häll i alla ingredienser, rör runt ordentligt och krydda sen. Ät med ris',
+      recipeIngredients: '4 äpplen, 3 päron, 2 tomater'),
   Recipe(
       recipeName: 'Godaste riset',
       recipeImage: 'Snake2.jpeg',
       recipeDescription:
-          'Stek riset, krydda med kryddor och koka sedan under lock'),
+          'Stek riset, krydda med kryddor och koka sedan under lock',
+      recipeIngredients: '4 äpplen, 3 päron, 2 tomater'),
   Recipe(
       recipeName: 'Godaste tacos',
       recipeImage: 'SnakeTurquose.jpg',

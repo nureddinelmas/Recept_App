@@ -9,17 +9,18 @@ class AddRecipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // String recipeTitle = '';
-    // String recipeIngredients = '';
-    // String recipeDescription = '';
+    String recipeTitle = '';
+    String recipeIngredients = '';
+    String recipeDescription = '';
 
     CollectionReference MyRecipes =
         FirebaseFirestore.instance.collection('MyRecipes');
+
     Future addRecipe() async {
       await MyRecipes.add({
-        'recipeTitle': "Sallad",
-        'recipeIngredients': ['Gurka', 'Gräslök', 'Sallad', 'Tomater'],
-        'recipeDescription': 'Blanda ihop allting och häll på massa dressing!',
+        'recipeTitle': recipeTitle,
+        'recipeIngredients': recipeIngredients,
+        'recipeDescription': recipeDescription,
       })
           .then((value) => print('New recipe added!'))
           .catchError((error) => print('Failed to add recipe : $error'));
@@ -59,10 +60,10 @@ class AddRecipe extends StatelessWidget {
                           showCursor: true,
                           textAlign: TextAlign.center,
                           textCapitalization: TextCapitalization.sentences,
-                          // onChanged: (value) {
-                          //   recipeTitle = value;
-                          //   print(recipeTitle);
-                          // },
+                          onChanged: (value) {
+                            recipeTitle = value;
+                            print(recipeTitle);
+                          },
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -88,10 +89,10 @@ class AddRecipe extends StatelessWidget {
                           showCursor: true,
                           textAlign: TextAlign.center,
                           textCapitalization: TextCapitalization.sentences,
-                          // onChanged: (value) {
-                          //   recipeIngredients = value;
-                          //   print(recipeIngredients);
-                          // },
+                          onChanged: (value) {
+                            recipeIngredients = value;
+                            print(recipeIngredients);
+                          },
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -117,10 +118,10 @@ class AddRecipe extends StatelessWidget {
                           showCursor: true,
                           textAlign: TextAlign.center,
                           textCapitalization: TextCapitalization.sentences,
-                          // onChanged: (value) {
-                          //   recipeDescription = value;
-                          //   print(recipeDescription);
-                          // },
+                          onChanged: (value) {
+                            recipeDescription = value;
+                            print(recipeDescription);
+                          },
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: Colors.white,
@@ -141,7 +142,7 @@ class AddRecipe extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           addRecipe();
-                          Navigator.of(context).pop();
+                          // Navigator.of(context).pop();
                         },
                         icon: const Icon(Icons.book_online),
                         style: ElevatedButton.styleFrom(
