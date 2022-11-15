@@ -12,6 +12,8 @@ class AddRecipe extends StatelessWidget {
     String recipeIngredients = '';
     String recipeDescription = '';
 
+    var _controller = TextEditingController();
+
     CollectionReference MyRecipes =
         FirebaseFirestore.instance.collection('MyRecipes');
 
@@ -56,6 +58,7 @@ class AddRecipe extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: TextField(
+                          controller: _controller,
                           showCursor: true,
                           textAlign: TextAlign.center,
                           textCapitalization: TextCapitalization.sentences,
@@ -83,6 +86,7 @@ class AddRecipe extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: TextField(
+                          controller: _controller,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           showCursor: true,
@@ -112,6 +116,7 @@ class AddRecipe extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: TextField(
+                          controller: _controller,
                           keyboardType: TextInputType.multiline,
                           maxLines: null,
                           showCursor: true,
@@ -141,7 +146,7 @@ class AddRecipe extends StatelessWidget {
                       ElevatedButton.icon(
                         onPressed: () {
                           addRecipe();
-                          // Navigator.of(context).pop();
+                          _controller.clear();
                         },
                         icon: const Icon(Icons.book_online),
                         style: ElevatedButton.styleFrom(
