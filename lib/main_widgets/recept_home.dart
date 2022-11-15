@@ -3,6 +3,7 @@ import 'package:recept_app/main_widgets/profile_screen.dart';
 
 import 'package:recept_app/models/main_model.dart';
 import 'package:recept_app/main_widgets/main_home.dart';
+import 'package:recept_app/screens/add_recipe_screen.dart';
 import 'package:recept_app/screens/favorite_screen.dart';
 
 class ReceptHomeScreen extends StatefulWidget {
@@ -18,9 +19,7 @@ class _ReceptHomeScreenState extends State<ReceptHomeScreen> {
   final List<Widget> tabs = const [
     MainHome(),
     FavoriteScreen(),
-    Center(
-      child: Text("New Recipe Screen"),
-    ),
+    AddRecipe(),
     ProfileScreen()
   ];
   @override
