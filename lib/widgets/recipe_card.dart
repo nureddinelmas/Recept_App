@@ -8,7 +8,7 @@ class RecipeCard extends StatefulWidget {
   final String source;
   final String cuisineType;
 
-  RecipeCard(
+  const RecipeCard(
       {super.key,
       required this.urlImage,
       required this.label,

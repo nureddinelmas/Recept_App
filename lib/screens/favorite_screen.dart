@@ -4,6 +4,7 @@ import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/recipe_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final firebaseProvider = FirebaseProvider();
 
@@ -33,6 +34,7 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
   final List labels = [];
   final List sources = [];
   final List cuisineTypes = [];
+  final List webAdresses = [];
 
   late final listenForFavorites = db
       .collection("userFavorites")
@@ -45,14 +47,26 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
       final label = doc.data()["label"].toString();
       final source = doc.data()["source"].toString();
       final cuisineType = doc.data()["cuisineType"].toString();
+      final webAdress = doc.data()["web"].toString();
       setState(() {
         recipeImages.add(image);
         labels.add(label);
         sources.add(source);
         cuisineTypes.add(cuisineType);
+        webAdresses.add(webAdress);
+        print(webAdresses);
       });
     }
   });
+
+  void launchWebsite(webAdress) async {
+    final uri = Uri.parse(webAdress);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.inAppWebView);
+    } else {
+      print("ERROR");
+    }
+  }
 
   @override
   initState() {
@@ -93,7 +107,7 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                       borderRadius: BorderRadius.circular(15.0),
                       child: GestureDetector(
                         onTap: () {
-                          //!
+                          launchWebsite(webAdresses[itemIndex]);
                         },
                         child: Image.network(recipeImages[itemIndex]),
                       )),
