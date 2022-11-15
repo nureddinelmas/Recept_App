@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RecipeCard extends StatefulWidget {
-  const RecipeCard({super.key});
+  final String recipeImage;
+  const RecipeCard({super.key, required this.recipeImage});
 
   @override
   State<RecipeCard> createState() => _RecipeCardState();
@@ -13,6 +14,7 @@ class _RecipeCardState extends State<RecipeCard> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List recipeImages = [];
+  
 
   late final listenForFavorites = db
       .collection("userFavorites")
@@ -27,13 +29,13 @@ class _RecipeCardState extends State<RecipeCard> {
     setState(() {
       recipeImages.clear();
       recipeImages.addAll(tmpList);
+      debugPrint(recipeImages.length.toString());
     });
   });
 
   Widget? getImages(List<dynamic> images) {
     for (var i = 0; i < recipeImages.length; i++) {
       recipeImages.add(Image.network(recipeImages[i]));
-
       return Image.network(recipeImages[i]);
     }
     return null;
@@ -72,7 +74,8 @@ class _RecipeCardState extends State<RecipeCard> {
               child: CircleAvatar(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: getImages(recipeImages), //!
+                  child: Image.network(widget.recipeImage)
+                  // getImages(recipeImages), //!
                 ),
               ),
             ),

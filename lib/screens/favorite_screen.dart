@@ -110,7 +110,9 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
               child: Column(
                 children: List.generate(
                   recipeImages.length,
-                  (index) => const RecipeCard(),
+                  (index) => RecipeCard(
+                    recipeImage: recipeImages[index],
+                  ),
                 ),
               ),
             ),

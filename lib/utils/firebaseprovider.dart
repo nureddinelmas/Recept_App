@@ -61,6 +61,7 @@ class FirebaseProvider {
       "clientmail": auth.currentUser?.email,
       "clientID": client.clientID,
       "clientApi": api,
+      "clientName": "",
     };
     await db.collection("users").doc(client.clientID).set(mapOfClient);
   }
