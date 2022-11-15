@@ -12,7 +12,6 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   CollectionReference user = FirebaseFirestore.instance.collection('users');
-  bool opacityLevel = false;
 
   @override
   Widget build(BuildContext context) {
