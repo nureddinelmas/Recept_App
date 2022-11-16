@@ -508,9 +508,9 @@ Future<List> getRecipes(String q) async {
   for (var item in body) {
     list1.add(item['recipe']);
 
-    list1.forEach((element) {
+    for (var element in list1) {
       list2.add(element);
-    });
+    }
   }
 
   return list2;
