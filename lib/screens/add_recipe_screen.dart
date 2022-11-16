@@ -106,182 +106,178 @@ class _AddRecipeState extends State<AddRecipe> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amberAccent,
+        backgroundColor: Color.fromARGB(255, 163, 246, 216),
         title: Text(
           'Add recipe',
           style: TextStyle(
             color: Colors.black,
             fontSize: 30,
             fontWeight: FontWeight.w600,
+            fontFamily: "Times",
           ),
         ),
       ),
       body: ListView(
         children: [
-          Container(
-            height: height,
-            width: width,
-            child: Center(
-              child: Container(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          _showPicker(context);
-                        },
-                        child: CircleAvatar(
-                          radius: 55,
-                          backgroundColor: Color.fromARGB(255, 247, 246, 244),
-                          child: _photo != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Image.file(
-                                    _photo!,
-                                    width: 250,
-                                    height: 250,
-                                    fit: BoxFit.fitHeight,
-                                  ),
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey[200],
-                                      borderRadius: BorderRadius.circular(50)),
+          Center(
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 30),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        _showPicker(context);
+                      },
+                      child: CircleAvatar(
+                        radius: 55,
+                        backgroundColor: Color.fromARGB(255, 247, 246, 244),
+                        child: _photo != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: Image.file(
+                                  _photo!,
                                   width: 250,
                                   height: 250,
-                                  child: Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.grey[800],
-                                    size: 60,
-                                  ),
+                                  fit: BoxFit.fitHeight,
                                 ),
-                        ),
+                              )
+                            : Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(50)),
+                                width: 250,
+                                height: 250,
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey[800],
+                                  size: 60,
+                                ),
+                              ),
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      color: Colors.amber,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: TextField(
-                              controller: recipeTitleTextController,
-                              showCursor: true,
-                              textAlign: TextAlign.center,
-                              textCapitalization: TextCapitalization.sentences,
-                              onChanged: (value) {
-                                recipeTitle = value;
-                                print(recipeTitle);
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                icon: Icon(
-                                  Icons.abc,
-                                  color: Colors.amberAccent,
-                                ),
-                                hintText: 'Title',
-                                hintStyle: TextStyle(color: Colors.amber),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: TextField(
-                              controller: recipeIngredientsTextController,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              showCursor: true,
-                              textAlign: TextAlign.center,
-                              textCapitalization: TextCapitalization.sentences,
-                              onChanged: (value) {
-                                recipeIngredients = value;
-                                print(recipeIngredients);
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                icon: Icon(
-                                  Icons.apple_rounded,
-                                  color: Colors.amberAccent,
-                                ),
-                                hintText: 'Ingredients',
-                                hintStyle: TextStyle(color: Colors.amber),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: TextField(
-                              controller: recipeDescriptionTextController,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              showCursor: true,
-                              textAlign: TextAlign.center,
-                              textCapitalization: TextCapitalization.sentences,
-                              onChanged: (value) {
-                                recipeDescription = value;
-                                print(recipeDescription);
-                              },
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                icon: Icon(
-                                  Icons.book,
-                                  color: Colors.amberAccent,
-                                ),
-                                hintText: 'Description',
-                                hintStyle: TextStyle(color: Colors.amberAccent),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              addRecipe();
-                              recipeTitleTextController.clear();
-                              recipeIngredientsTextController.clear();
-                              recipeDescriptionTextController.clear();
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    padding: const EdgeInsets.all(5.0),
+                    color: Color.fromARGB(255, 182, 247, 225),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: TextField(
+                            controller: recipeTitleTextController,
+                            showCursor: true,
+                            textAlign: TextAlign.center,
+                            textCapitalization: TextCapitalization.sentences,
+                            onChanged: (value) {
+                              recipeTitle = value;
+                              print(recipeTitle);
                             },
-                            icon: const Icon(Icons.book_online),
-                            style: ElevatedButton.styleFrom(
-                              elevation: 20,
-                              shape: const StadiumBorder(),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 40, vertical: 15),
-                              textStyle: const TextStyle(
-                                  fontSize: 20.0, fontFamily: "Times"),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: 'Title',
+                              hintStyle: TextStyle(color: Colors.amber),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
                             ),
-                            label: const Text("Submit"),
                           ),
-                        ],
-                      ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: TextField(
+                            controller: recipeIngredientsTextController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            showCursor: true,
+                            textAlign: TextAlign.center,
+                            textCapitalization: TextCapitalization.sentences,
+                            onChanged: (value) {
+                              recipeIngredients = value;
+                              print(recipeIngredients);
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: 'Ingredients',
+                              hintStyle: TextStyle(color: Colors.amber),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: TextField(
+                            controller: recipeDescriptionTextController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            showCursor: true,
+                            textAlign: TextAlign.center,
+                            textCapitalization: TextCapitalization.sentences,
+                            onChanged: (value) {
+                              recipeDescription = value;
+                              print(recipeDescription);
+                            },
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText: 'Description',
+                              hintStyle: TextStyle(color: Colors.amberAccent),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            addRecipe();
+                            recipeTitleTextController.clear();
+                            recipeIngredientsTextController.clear();
+                            recipeDescriptionTextController.clear();
+                          },
+                          icon: const Icon(Icons.thumb_up),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 246, 226, 165),
+                            shadowColor: Color.fromARGB(255, 247, 202, 117),
+                            foregroundColor: Color.fromARGB(255, 102, 99, 90),
+                            elevation: 20,
+                            shape: const StadiumBorder(),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 40, vertical: 15),
+                            textStyle: const TextStyle(
+                              fontSize: 20.0,
+                              fontFamily: "Times",
+                            ),
+                          ),
+                          label: const Text(
+                            "Submit",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
             ),
           ),
