@@ -131,15 +131,15 @@ class _AddRecipeState extends State<AddRecipe> {
                         _showPicker(context);
                       },
                       child: CircleAvatar(
-                        radius: 55,
+                        radius: 100,
                         backgroundColor: Color.fromARGB(255, 247, 246, 244),
                         child: _photo != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(50),
                                 child: Image.file(
                                   _photo!,
-                                  width: 250,
-                                  height: 250,
+                                  width: 350,
+                                  height: 350,
                                   fit: BoxFit.fitHeight,
                                 ),
                               )
@@ -147,8 +147,8 @@ class _AddRecipeState extends State<AddRecipe> {
                                 decoration: BoxDecoration(
                                     color: Colors.grey[200],
                                     borderRadius: BorderRadius.circular(50)),
-                                width: 250,
-                                height: 250,
+                                width: 350,
+                                height: 350,
                                 child: Icon(
                                   Icons.camera_alt,
                                   color: Colors.grey[800],
@@ -176,13 +176,17 @@ class _AddRecipeState extends State<AddRecipe> {
                               print(recipeTitle);
                             },
                             decoration: InputDecoration(
+                              focusedBorder: InputBorder.none,
                               filled: true,
                               fillColor: Colors.white,
                               hintText: 'Title',
                               hintStyle: TextStyle(color: Colors.amber),
-                              border: OutlineInputBorder(
+                              enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
+                                  Radius.circular(30),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 200, 226, 228),
                                 ),
                               ),
                             ),
@@ -202,13 +206,17 @@ class _AddRecipeState extends State<AddRecipe> {
                               print(recipeIngredients);
                             },
                             decoration: InputDecoration(
+                              focusedBorder: InputBorder.none,
                               filled: true,
                               fillColor: Colors.white,
                               hintText: 'Ingredients',
                               hintStyle: TextStyle(color: Colors.amber),
-                              border: OutlineInputBorder(
+                              enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
+                                  Radius.circular(30),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 200, 226, 228),
                                 ),
                               ),
                             ),
@@ -228,18 +236,23 @@ class _AddRecipeState extends State<AddRecipe> {
                               print(recipeDescription);
                             },
                             decoration: InputDecoration(
+                              focusedBorder: InputBorder.none,
                               filled: true,
                               fillColor: Colors.white,
                               hintText: 'Description',
                               hintStyle: TextStyle(color: Colors.amberAccent),
-                              border: OutlineInputBorder(
+                              enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
+                                  Radius.circular(30),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Color.fromARGB(255, 200, 226, 228),
                                 ),
                               ),
                             ),
                           ),
                         ),
+                        SizedBox(height: 30),
                         ElevatedButton.icon(
                           onPressed: () {
                             addRecipe();
@@ -268,6 +281,7 @@ class _AddRecipeState extends State<AddRecipe> {
                                 fontWeight: FontWeight.w600),
                           ),
                         ),
+                        SizedBox(height: 50),
                       ],
                     ),
                   ),

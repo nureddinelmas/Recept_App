@@ -5,6 +5,7 @@ import 'package:recept_app/models/main_model.dart';
 import 'package:recept_app/main_widgets/main_home.dart';
 import 'package:recept_app/screens/add_recipe_screen.dart';
 import 'package:recept_app/screens/favorite_screen.dart';
+import 'package:recept_app/screens/my_recipes.dart';
 
 class ReceptHomeScreen extends StatefulWidget {
   const ReceptHomeScreen({Key? key}) : super(key: key);
@@ -20,7 +21,8 @@ class _ReceptHomeScreenState extends State<ReceptHomeScreen> {
     MainHome(),
     FavoriteScreen(),
     AddRecipe(),
-    ProfileScreen()
+    ProfileScreen(),
+    MyRecipes()
   ];
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,8 @@ class _ReceptHomeScreenState extends State<ReceptHomeScreen> {
               icon: Icon(Icons.favorite_border), label: "Favorite"),
           BottomNavigationBarItem(
               icon: Icon(Icons.add_box_rounded), label: "New Recipe"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile")
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: "MyRecipes")
         ],
         onTap: (index) {
           setState(() {
