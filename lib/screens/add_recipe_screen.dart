@@ -16,6 +16,32 @@ class AddRecipe extends StatefulWidget {
 }
 
 class _AddRecipeState extends State<AddRecipe> {
+  late String recipeTitle;
+  late String recipeIngredients;
+  late String recipeDescription;
+  late TextEditingController recipeTitleTextController;
+  late TextEditingController recipeIngredientsTextController;
+  late TextEditingController recipeDescriptionTextController;
+
+  @override
+  void initState() {
+    super.initState();
+    recipeTitleTextController = TextEditingController();
+    recipeIngredientsTextController = TextEditingController();
+    recipeDescriptionTextController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    recipeTitleTextController.dispose();
+    recipeIngredientsTextController.dispose();
+    recipeDescriptionTextController.dispose();
+    super.dispose();
+  }
+
+  CollectionReference MyRecipes =
+      FirebaseFirestore.instance.collection('MyRecipes');
+
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -65,15 +91,6 @@ class _AddRecipeState extends State<AddRecipe> {
 
   @override
   Widget build(BuildContext context) {
-    String recipeTitle = '';
-    String recipeIngredients = '';
-    String recipeDescription = '';
-
-    var _controller = TextEditingController();
-
-    CollectionReference MyRecipes =
-        FirebaseFirestore.instance.collection('MyRecipes');
-
     Future addRecipe() async {
       await MyRecipes.add({
         'recipeTitle': recipeTitle,
@@ -116,14 +133,14 @@ class _AddRecipeState extends State<AddRecipe> {
                         },
                         child: CircleAvatar(
                           radius: 55,
-                          backgroundColor: Color(0xffFDCF09),
+                          backgroundColor: Color.fromARGB(255, 247, 246, 244),
                           child: _photo != null
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(50),
                                   child: Image.file(
                                     _photo!,
-                                    width: 100,
-                                    height: 100,
+                                    width: 250,
+                                    height: 250,
                                     fit: BoxFit.fitHeight,
                                   ),
                                 )
@@ -131,16 +148,18 @@ class _AddRecipeState extends State<AddRecipe> {
                                   decoration: BoxDecoration(
                                       color: Colors.grey[200],
                                       borderRadius: BorderRadius.circular(50)),
-                                  width: 100,
-                                  height: 100,
+                                  width: 250,
+                                  height: 250,
                                   child: Icon(
                                     Icons.camera_alt,
                                     color: Colors.grey[800],
+                                    size: 60,
                                   ),
                                 ),
                         ),
                       ),
                     ),
+                    SizedBox(height: 10),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       color: Colors.amber,
@@ -149,7 +168,7 @@ class _AddRecipeState extends State<AddRecipe> {
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: TextField(
-                              controller: _controller,
+                              controller: recipeTitleTextController,
                               showCursor: true,
                               textAlign: TextAlign.center,
                               textCapitalization: TextCapitalization.sentences,
@@ -177,7 +196,7 @@ class _AddRecipeState extends State<AddRecipe> {
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: TextField(
-                              controller: _controller,
+                              controller: recipeIngredientsTextController,
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
                               showCursor: true,
@@ -207,7 +226,7 @@ class _AddRecipeState extends State<AddRecipe> {
                           Padding(
                             padding: const EdgeInsets.all(10),
                             child: TextField(
-                              controller: _controller,
+                              controller: recipeDescriptionTextController,
                               keyboardType: TextInputType.multiline,
                               maxLines: null,
                               showCursor: true,
@@ -237,7 +256,9 @@ class _AddRecipeState extends State<AddRecipe> {
                           ElevatedButton.icon(
                             onPressed: () {
                               addRecipe();
-                              _controller.clear();
+                              recipeTitleTextController.clear();
+                              recipeIngredientsTextController.clear();
+                              recipeDescriptionTextController.clear();
                             },
                             icon: const Icon(Icons.book_online),
                             style: ElevatedButton.styleFrom(
