@@ -1,11 +1,21 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
 // import 'package:recept_app/models/recipes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:recept_app/minor_widgets/imagepicker.dart';
 
-class AddRecipe extends StatelessWidget {
-  const AddRecipe({super.key});
+class AddRecipe extends StatefulWidget {
+  const AddRecipe({Key? key}) : super(key: key);
 
+  @override
+  _AddRecipeState createState() => _AddRecipeState();
+}
+
+class _AddRecipeState extends State<AddRecipe> {
   @override
   Widget build(BuildContext context) {
     String recipeTitle = '';
