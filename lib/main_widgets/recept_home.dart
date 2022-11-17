@@ -7,7 +7,6 @@ import 'package:recept_app/screens/add_recipe_screen.dart';
 import 'package:recept_app/screens/favorite_screen.dart';
 import 'package:recept_app/screens/my_recipes.dart';
 import 'package:recept_app/screens/favorite_screen.dart';
-import 'package:recept_app/screens/my_recipes.dart';
 
 class ReceptHomeScreen extends StatefulWidget {
   const ReceptHomeScreen({Key? key}) : super(key: key);
@@ -23,9 +22,8 @@ class _ReceptHomeScreenState extends State<ReceptHomeScreen> {
     MainHome(),
     FavoriteScreen(),
     AddRecipe(),
-    MyRecipes(),
-    ProfileScreen()
-
+    ProfileScreen(),
+    MyRecipes()
   ];
   @override
   Widget build(BuildContext context) {
