@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart';
 import 'package:recept_app/models/my_recipes_model.dart';
+import 'package:recept_app/models/recipeModel.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
 
 class MyRecipes extends StatefulWidget {
@@ -14,29 +16,17 @@ class MyRecipes extends StatefulWidget {
 class _MyRecipesState extends State<MyRecipes> {
   final CollectionReference collectionReference =
       FirebaseFirestore.instance.collection('MyRecipes');
-  final _auth = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance;
 
   late User loggedInUser;
 
-  @override
-  void initState() {
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() async {
-    try {
-      final user = _auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-        print(loggedInUser.email);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
-
   List<Object> _recipeList = [];
+
+  @override
+  initState() {
+    super.initState();
+    getRecipesList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,30 +34,35 @@ class _MyRecipesState extends State<MyRecipes> {
       appBar: AppBar(
         title: Text('My Recipes'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: collectionReference.snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Container(child: Text('Hejh'));
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+      body: SafeArea(
+        child: ListView.builder(
+            itemCount: _recipeList.length,
+            itemBuilder: (context, index) {
+              return Text('$index');
+            }),
       ),
     );
   }
+
+  Future getRecipesList() async {
+    final uid = auth.currentUser?.uid;
+    var data = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .collection('MyRecipes')
+        .orderBy('created', descending: true)
+        .get();
+
+    setState(() {
+      _recipeList =
+          List.from(data.docs.map((doc) => MyRecipesModel.fromSnapshot(doc)));
+      print('$_recipeList');
+    });
+  }
 }
 
-//   Future getRecipesList() async {
-//     var data = await db.collection("MyRecipes").doc().get().then(
-//           (res) => print("Successfully completed"),
-//           onError: (e) => print("Error completing: $e"),
-//         );
-//     setState(() {
-//       _recipeList = List.from(data.docs.map((doc) => MyRecipes.fromSnapshot(doc)));
-//     });
-//   }
-// }
+  
+
 
 
 // class MessageBubble extends StatelessWidget {
