@@ -14,7 +14,6 @@ class _RecipeCardState extends State<RecipeCard> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List recipeImages = [];
-  
 
   late final listenForFavorites = db
       .collection("userFavorites")
@@ -73,10 +72,10 @@ class _RecipeCardState extends State<RecipeCard> {
               ),
               child: CircleAvatar(
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(widget.recipeImage)
-                  // getImages(recipeImages), //!
-                ),
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.network(widget.recipeImage)
+                    // getImages(recipeImages), //!
+                    ),
               ),
             ),
             Column(
