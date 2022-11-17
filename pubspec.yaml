@@ -11,8 +11,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  path: ^1.8.0  
+  image_picker: ^0.8.4    
 
   firebase_core: ^2.1.1
+  firebase_storage: ^11.0.5
   firebase_analytics: ^10.0.3  
   firebase_auth: ^4.1.0
   cloud_firestore: ^4.0.3
@@ -33,6 +36,8 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+  assets:
+    - assets/Images/
 
   assets:
    - assets/images/
