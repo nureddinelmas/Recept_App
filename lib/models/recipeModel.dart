@@ -1,5 +1,10 @@
 import 'dart:convert';
 import "package:http/http.dart" as http;
+import 'package:recept_app/utils/client.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+final client = Client();
 
 class RecipeModel {
   RecipeModel({
@@ -493,12 +498,13 @@ class EnumValues<T> {
   }
 }
 
-
 Future<List> getRecipes(String q) async {
-
+  final db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   List list1 = [];
   List list2 = [];
+
   var url =
       "https://api.edamam.com/api/recipes/v2?type=public&q=$q&app_id=062e2906&app_key=ab4f8a9c1b6ba8b2b72c475829e7f354";
   final response = await http.get(Uri.parse(url));

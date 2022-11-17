@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
@@ -80,7 +78,7 @@ class FirebaseProvider {
   }
 
   void addToFavorite(dynamic imageUrl, dynamic webAdress, dynamic label,
-      dynamic source, dynamic cuisineType) {
+      dynamic source, dynamic cuisineType) async {
     if (auth.currentUser?.uid != null) {
       final mapOfFavorites = <String, dynamic>{
         "image": imageUrl,
@@ -88,25 +86,25 @@ class FirebaseProvider {
         "label": label,
         "source": source,
         "cuisineType": cuisineType,
-        "isFavorite": true
+        "isFavorite": true,
       };
-      db
+      await db
           .collection("userFavorites")
           .doc(auth.currentUser?.uid)
           .collection("favorites")
-          .doc()
+          .doc(label)
           .set(mapOfFavorites);
     }
   }
 
-  void updateUserFavorite() async {
+  void toggleFavorite(String labelId) async {
     if (auth.currentUser?.uid != null) {
       await db
           .collection("userFavorites")
           .doc(auth.currentUser?.uid)
           .collection("favorites")
-          .doc().update({"isFavorite"})
-          
+          .doc(labelId)
+          .update({"isFavorite": client.isFavorite = !client.isFavorite});
     }
   }
 

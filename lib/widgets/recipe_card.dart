@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
 
 class RecipeCard extends StatefulWidget {
   final String urlImage;
@@ -22,6 +23,7 @@ class RecipeCard extends StatefulWidget {
 class _RecipeCardState extends State<RecipeCard> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final firebaseProvider = FirebaseProvider();
 
   String modifyLabel(String label) {
     final string = label.substring(0, 20);
@@ -57,7 +59,6 @@ class _RecipeCardState extends State<RecipeCard> {
               child: CircleAvatar(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  //!
                   child: Image.network(widget.urlImage),
                 ),
               ),

@@ -1,8 +1,12 @@
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/minor_widgets/recipe_details.dart';
+import 'package:recept_app/utils/client.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/streambuilder.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'recipeModel.dart';
@@ -54,15 +58,42 @@ class _MainModelState extends State<MainModel> {
 
 class Build extends StatefulWidget {
   final List model;
-  const Build({Key? key, required this.model}) : super(key: key);
-
+  Build({Key? key, required this.model}) : super(key: key);
   @override
   State<Build> createState() => _BuildState();
 }
 
 class _BuildState extends State<Build> {
   final firebaseProvider = FirebaseProvider();
-  var isFavorite = false;
+  final db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final List favoriteList = [];
+
+  // late final listenForFavorites = db
+  //     .collection("userFavorites")
+  //     .doc(auth.currentUser?.uid)
+  //     .collection("favorites")
+  //     .snapshots()
+  //     .listen((snapshot) {
+  //   for (var doc in snapshot.docs) {
+  //     favoriteList.clear();
+  //     favoriteList.add(doc.get("isFavorite"));
+  //     print(favoriteList);
+  //   }
+  // });
+
+  // @override
+  // initState() {
+  //   super.initState();
+  //   listenForFavorites;
+  // }
+
+  // @override
+  // void dispose() {
+  //   listenForFavorites.cancel();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return StaggeredGridView.countBuilder(
@@ -120,21 +151,35 @@ class _BuildState extends State<Build> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  firebaseProvider.addToFavorite(
-                                      modell['images']['REGULAR']['url'],
-                                      modell['url'],
-                                      modell['label'].toString(),
-                                      modell['source'],
-                                      modell["cuisineType"]);
-                                },
-                                icon: Icon(
-                                  isFavorite
-                                      ? Icons.favorite_border
-                                      : Icons.favorite,
-                                  color: Colors.red,
-                                ))
+                            StreamBuilderToggle(
+                              isFavorite: client.isFavorite,
+                              imageUrl: modell["images"]["REGULAR"]["url"],
+                              webAdress: modell["url"],
+                              label: modell["label"],
+                              source: modell["source"],
+                              cuisineType: modell["cuisineType"],
+                              modell: modell,
+                            )
+                            // IconButton(
+                            //   onPressed: () {
+                            //     firebaseProvider
+                            //         .toggleFavorite(modell['label']);
+
+                            //     // firebaseProvider.addToFavorite(
+                            //     //   modell['images']['REGULAR']['url'],
+                            //     //   modell['url'],
+                            //     //   modell['label'].toString(),
+                            //     //   modell['source'],
+                            //     //   modell["cuisineType"],
+                            //     // );
+                            //   },
+                            //   icon: Icon(
+                            //     client.isFavorite
+                            //         ? Icons.favorite
+                            //         : Icons.favorite_border,
+                            //     color: Colors.red,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

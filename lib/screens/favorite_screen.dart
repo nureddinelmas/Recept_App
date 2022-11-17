@@ -26,6 +26,7 @@ class FavoriteRecipes extends StatefulWidget {
 }
 
 class _FavoriteRecipesState extends State<FavoriteRecipes> {
+  final firebaseProvider = FirebaseProvider();
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
   final List recipeImages = [];
