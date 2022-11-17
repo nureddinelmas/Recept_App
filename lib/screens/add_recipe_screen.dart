@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:recept_app/screens/my_recipes.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
 // import 'package:recept_app/models/recipes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,8 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recept_app/minor_widgets/imagepicker.dart';
+import 'package:recept_app/models/my_recipes_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddRecipe extends StatefulWidget {
   const AddRecipe({Key? key}) : super(key: key);
@@ -16,12 +19,17 @@ class AddRecipe extends StatefulWidget {
 }
 
 class _AddRecipeState extends State<AddRecipe> {
-  late String recipeTitle;
-  late String recipeIngredients;
-  late String recipeDescription;
+  MyRecipesModel _myRecipes = MyRecipesModel(
+      created: null,
+      recipeDescription: '',
+      recipeIngredients: '',
+      recipeTitle: '');
+
   late TextEditingController recipeTitleTextController;
   late TextEditingController recipeIngredientsTextController;
   late TextEditingController recipeDescriptionTextController;
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -39,8 +47,23 @@ class _AddRecipeState extends State<AddRecipe> {
     super.dispose();
   }
 
-  CollectionReference MyRecipes =
-      FirebaseFirestore.instance.collection('MyRecipes');
+  @override
+  void saveRecipe() async {
+    _myRecipes.recipeTitle = recipeTitleTextController.text.toString();
+    _myRecipes.recipeIngredients =
+        recipeIngredientsTextController.text.toString();
+    _myRecipes.recipeDescription =
+        recipeDescriptionTextController.text.toString();
+    _myRecipes.created = DateTime.now();
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(auth.currentUser?.uid)
+        .collection('MyRecipes')
+        .add(_myRecipes.toJson())
+        .then((value) => print('New recipe added!'))
+        .catchError((error) => print('Failed to add recipe : $error'));
+  }
 
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
@@ -91,16 +114,6 @@ class _AddRecipeState extends State<AddRecipe> {
 
   @override
   Widget build(BuildContext context) {
-    Future addRecipe() async {
-      await MyRecipes.add({
-        'recipeTitle': recipeTitle,
-        'recipeIngredients': recipeIngredients,
-        'recipeDescription': recipeDescription,
-      })
-          .then((value) => print('New recipe added!'))
-          .catchError((error) => print('Failed to add recipe : $error'));
-    }
-
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
@@ -172,8 +185,8 @@ class _AddRecipeState extends State<AddRecipe> {
                             textAlign: TextAlign.center,
                             textCapitalization: TextCapitalization.sentences,
                             onChanged: (value) {
-                              recipeTitle = value;
-                              print(recipeTitle);
+                              _myRecipes.recipeTitle = value;
+                              print(_myRecipes.recipeTitle);
                             },
                             decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
@@ -202,8 +215,8 @@ class _AddRecipeState extends State<AddRecipe> {
                             textAlign: TextAlign.center,
                             textCapitalization: TextCapitalization.sentences,
                             onChanged: (value) {
-                              recipeIngredients = value;
-                              print(recipeIngredients);
+                              _myRecipes.recipeIngredients = value;
+                              print(_myRecipes.recipeIngredients);
                             },
                             decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
@@ -232,8 +245,8 @@ class _AddRecipeState extends State<AddRecipe> {
                             textAlign: TextAlign.center,
                             textCapitalization: TextCapitalization.sentences,
                             onChanged: (value) {
-                              recipeDescription = value;
-                              print(recipeDescription);
+                              _myRecipes.recipeDescription = value;
+                              print(_myRecipes.recipeDescription);
                             },
                             decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
@@ -255,7 +268,7 @@ class _AddRecipeState extends State<AddRecipe> {
                         SizedBox(height: 30),
                         ElevatedButton.icon(
                           onPressed: () {
-                            addRecipe();
+                            saveRecipe();
                             recipeTitleTextController.clear();
                             recipeIngredientsTextController.clear();
                             recipeDescriptionTextController.clear();
@@ -330,3 +343,14 @@ class _AddRecipeState extends State<AddRecipe> {
         });
   }
 }
+
+  //  Future addRecipe() async {
+  //     await collectionReference
+  //         .add({
+  //           'recipeTitle': _myRecipes.recipeTitle,
+  //           'recipeIngredients': _myRecipes.recipeIngredients,
+  //           'recipeDescription': _myRecipes.recipeDescription,
+  //         })
+  //         .then((value) => print('New recipe added!'))
+  //         .catchError((error) => print('Failed to add recipe : $error'));
+  //   }
