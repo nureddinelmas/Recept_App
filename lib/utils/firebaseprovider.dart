@@ -4,6 +4,7 @@ import 'package:recept_app/main_widgets/recept_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recept_app/utils/utils.dart';
 import 'package:recept_app/utils/client.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseProvider {
   final db = FirebaseFirestore.instance;
