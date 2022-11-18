@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:recept_app/screens/my_recipes.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
-// import 'package:recept_app/models/recipes.dart';
+import 'package:recept_app/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
@@ -20,10 +20,7 @@ class AddRecipe extends StatefulWidget {
 
 class _AddRecipeState extends State<AddRecipe> {
   MyRecipesModel _myRecipes = MyRecipesModel(
-      created: null,
-      recipeDescription: '',
-      recipeIngredients: '',
-      recipeTitle: '');
+      image: '', recipeDescription: '', recipeIngredients: '', recipeTitle: '');
 
   late TextEditingController recipeTitleTextController;
   late TextEditingController recipeIngredientsTextController;
@@ -49,12 +46,16 @@ class _AddRecipeState extends State<AddRecipe> {
 
   @override
   void saveRecipe() async {
+    if (imageUrl.isEmpty) {
+      ScaffoldMessenger.of(this.context)
+          .showSnackBar(SnackBar(content: Text('Please upload image')));
+    }
     _myRecipes.recipeTitle = recipeTitleTextController.text.toString();
     _myRecipes.recipeIngredients =
         recipeIngredientsTextController.text.toString();
     _myRecipes.recipeDescription =
         recipeDescriptionTextController.text.toString();
-    _myRecipes.created = DateTime.now();
+    _myRecipes.image = imageUrl;
 
     await FirebaseFirestore.instance
         .collection('users')
@@ -64,6 +65,8 @@ class _AddRecipeState extends State<AddRecipe> {
         .then((value) => print('New recipe added!'))
         .catchError((error) => print('Failed to add recipe : $error'));
   }
+
+  String imageUrl = '';
 
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
@@ -78,6 +81,7 @@ class _AddRecipeState extends State<AddRecipe> {
       if (pickedFile != null) {
         _photo = File(pickedFile.path);
         uploadFile();
+        print('Picked file is: ${pickedFile.path}');
       } else {
         print('No image selected.');
       }
@@ -91,6 +95,7 @@ class _AddRecipeState extends State<AddRecipe> {
       if (pickedFile != null) {
         _photo = File(pickedFile.path);
         uploadFile();
+        print('Picked file is: ${pickedFile.path}');
       } else {
         print('No image selected.');
       }
@@ -107,6 +112,7 @@ class _AddRecipeState extends State<AddRecipe> {
           .ref(destination)
           .child('file/');
       await ref.putFile(_photo!);
+      imageUrl = await ref.getDownloadURL();
     } catch (e) {
       print('error occured');
     }
@@ -269,6 +275,7 @@ class _AddRecipeState extends State<AddRecipe> {
                         ElevatedButton.icon(
                           onPressed: () {
                             saveRecipe();
+                            uploadFile();
                             recipeTitleTextController.clear();
                             recipeIngredientsTextController.clear();
                             recipeDescriptionTextController.clear();
