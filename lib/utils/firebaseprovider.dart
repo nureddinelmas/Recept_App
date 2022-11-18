@@ -99,14 +99,25 @@ class FirebaseProvider {
 
   void toggleFavorite(String labelId) async {
     if (auth.currentUser?.uid != null) {
+      if (labelId.isEmpty) {
+        await db
+            .collection("userFavorites")
+            .doc(auth.currentUser?.uid)
+            .collection("favorites")
+            .doc(labelId)
+            .update({"isFavorite": client.isFavorite = !client.isFavorite});
+      }
+    }
+  }
+
+  void deleteFavorite(String labelId) async {
+    if (auth.currentUser?.uid != null) {
       await db
           .collection("userFavorites")
           .doc(auth.currentUser?.uid)
           .collection("favorites")
           .doc(labelId)
-          .update({"isFavorite": client.isFavorite = !client.isFavorite});
+          .delete();
     }
   }
-
-  void deleteFavorite() async {}
 }

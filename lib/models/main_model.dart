@@ -67,32 +67,7 @@ class _BuildState extends State<Build> {
   final firebaseProvider = FirebaseProvider();
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final List favoriteList = [];
-
-  // late final listenForFavorites = db
-  //     .collection("userFavorites")
-  //     .doc(auth.currentUser?.uid)
-  //     .collection("favorites")
-  //     .snapshots()
-  //     .listen((snapshot) {
-  //   for (var doc in snapshot.docs) {
-  //     favoriteList.clear();
-  //     favoriteList.add(doc.get("isFavorite"));
-  //     print(favoriteList);
-  //   }
-  // });
-
-  // @override
-  // initState() {
-  //   super.initState();
-  //   listenForFavorites;
-  // }
-
-  // @override
-  // void dispose() {
-  //   listenForFavorites.cancel();
-  //   super.dispose();
-  // }
+  final client = Client();
 
   @override
   Widget build(BuildContext context) {
@@ -152,34 +127,13 @@ class _BuildState extends State<Build> {
                               ),
                             ),
                             StreamBuilderToggle(
-                              isFavorite: client.isFavorite,
                               imageUrl: modell["images"]["REGULAR"]["url"],
                               webAdress: modell["url"],
                               label: modell["label"],
                               source: modell["source"],
                               cuisineType: modell["cuisineType"],
-                              modell: modell,
-                            )
-                            // IconButton(
-                            //   onPressed: () {
-                            //     firebaseProvider
-                            //         .toggleFavorite(modell['label']);
-
-                            //     // firebaseProvider.addToFavorite(
-                            //     //   modell['images']['REGULAR']['url'],
-                            //     //   modell['url'],
-                            //     //   modell['label'].toString(),
-                            //     //   modell['source'],
-                            //     //   modell["cuisineType"],
-                            //     // );
-                            //   },
-                            //   icon: Icon(
-                            //     client.isFavorite
-                            //         ? Icons.favorite
-                            //         : Icons.favorite_border,
-                            //     color: Colors.red,
-                            //   ),
-                            // ),
+                              isFavorite: client.isFavorite,
+                            ),
                           ],
                         ),
                       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recept_app/models/recipeModel.dart';
+
 import 'package:recept_app/utils/firebaseprovider.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -14,7 +15,6 @@ class StreamBuilderToggle extends StatefulWidget {
   dynamic label;
   dynamic source;
   dynamic cuisineType;
-  dynamic modell;
   StreamBuilderToggle({
     super.key,
     required this.isFavorite,
@@ -23,7 +23,6 @@ class StreamBuilderToggle extends StatefulWidget {
     required this.label,
     required this.source,
     required this.cuisineType,
-    required this.modell,
   });
 
   @override
@@ -48,19 +47,24 @@ class _StreamBuilderToggleState extends State<StreamBuilderToggle> {
           );
         } else {
           for (var doc in snapshot.data!.docs) {
-            if (doc.id == widget.modell["label"]) {
+            if (doc.id == widget.label && widget.isFavorite == false) {
               widget.isFavorite = !widget.isFavorite;
             }
           }
           return IconButton(
               onPressed: () {
-                // firebaseProvider.addToFavorite(
-                //     widget.imageUrl,
-                //     widget.webAdress,
-                //     widget.label,
-                //     widget.source,
-                //     widget.source);
-                firebaseProvider.toggleFavorite(widget.label);
+                if (widget.isFavorite == false) {
+                  firebaseProvider.addToFavorite(
+                    widget.imageUrl,
+                    widget.webAdress,
+                    widget.label,
+                    widget.source,
+                    widget.cuisineType,
+                  );
+                } else {
+                  firebaseProvider.deleteFavorite(widget.label);
+                }
+                widget.isFavorite = false;
               },
               icon: Icon(
                   widget.isFavorite ? Icons.favorite : Icons.favorite_border,
@@ -70,11 +74,3 @@ class _StreamBuilderToggleState extends State<StreamBuilderToggle> {
     );
   }
 }
-// return new ListView.builder(
-//             itemCount: snapshot.data.documents.length,
-//             itemBuilder: (context, index) {
-//               DocumentSnapshot ds = snapshot.data.documents[index];
-//               return new Lost_Card(
-//                 headImageAssetPath : ds["url"];
-
-// );
