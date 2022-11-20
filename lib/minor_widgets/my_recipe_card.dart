@@ -38,36 +38,38 @@ class MyRecipeCard extends StatelessWidget {
                 size: Size(100, 150),
               ),
             ),
-            Row(
-              children: <Widget>[
-                Image.network(
-                  '${_myRecipe.image}',
-                  height: 64,
-                  width: 64,
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      _myRecipe.recipeTitle,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      'Ingredients: ${_myRecipe.recipeIngredients}',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w500),
-                    ),
-                    Text(
-                      'Description: ${_myRecipe.recipeDescription}',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w500),
-                    )
-                  ],
-                )
-              ],
-            )
+            Positioned.fill(
+              child: Row(
+                children: <Widget>[
+                  Image.network(
+                    '${_myRecipe.image}',
+                    height: 64,
+                    width: 64,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        _myRecipe.recipeTitle,
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        'Ingredients: ${_myRecipe.recipeIngredients}',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        'Description: ${_myRecipe.recipeDescription}',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
           ],
         ),
       ),
