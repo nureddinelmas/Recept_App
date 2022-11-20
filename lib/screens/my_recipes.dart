@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,7 +52,6 @@ class _MyRecipesState extends State<MyRecipes> {
         .collection('users')
         .doc(uid)
         .collection('MyRecipes')
-        .orderBy('created', descending: true)
         .get();
 
     setState(() {
