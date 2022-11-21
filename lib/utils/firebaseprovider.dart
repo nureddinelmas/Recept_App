@@ -13,6 +13,7 @@ class FirebaseProvider {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final utils = Utils();
   final client = Client();
+
   final String? foodSearch = "popular";
   late final api =
       "https://api.edamam.com/api/recipes/v2?type=public&q=$foodSearch&app_id=0cceac24&app_key=53899a67af0e3367cf30b5d85f5de4ac";
@@ -91,6 +92,7 @@ class FirebaseProvider {
         "cuisineType": cuisineType,
         "isFavorite": true,
       };
+
       await db
           .collection("userFavorites")
           .doc(auth.currentUser?.uid)

@@ -68,7 +68,6 @@ class _BuildState extends State<Build> {
   final firebaseProvider = FirebaseProvider();
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final client = Client();
 
   @override
   Widget build(BuildContext context) {
