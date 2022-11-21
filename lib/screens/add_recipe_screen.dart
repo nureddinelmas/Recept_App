@@ -1,13 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:recept_app/screens/my_recipes.dart';
-import 'package:recept_app/utils/firebaseprovider.dart';
-import 'package:recept_app/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:recept_app/minor_widgets/imagepicker.dart';
 import 'package:recept_app/models/my_recipes_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -192,7 +188,6 @@ class _AddRecipeState extends State<AddRecipe> {
                             textCapitalization: TextCapitalization.sentences,
                             onChanged: (value) {
                               _myRecipes.recipeTitle = value;
-                              print(_myRecipes.recipeTitle);
                             },
                             decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
@@ -222,7 +217,6 @@ class _AddRecipeState extends State<AddRecipe> {
                             textCapitalization: TextCapitalization.sentences,
                             onChanged: (value) {
                               _myRecipes.recipeIngredients = value;
-                              print(_myRecipes.recipeIngredients);
                             },
                             decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
@@ -252,7 +246,6 @@ class _AddRecipeState extends State<AddRecipe> {
                             textCapitalization: TextCapitalization.sentences,
                             onChanged: (value) {
                               _myRecipes.recipeDescription = value;
-                              print(_myRecipes.recipeDescription);
                             },
                             decoration: InputDecoration(
                               focusedBorder: InputBorder.none,
@@ -350,14 +343,3 @@ class _AddRecipeState extends State<AddRecipe> {
         });
   }
 }
-
-  //  Future addRecipe() async {
-  //     await collectionReference
-  //         .add({
-  //           'recipeTitle': _myRecipes.recipeTitle,
-  //           'recipeIngredients': _myRecipes.recipeIngredients,
-  //           'recipeDescription': _myRecipes.recipeDescription,
-  //         })
-  //         .then((value) => print('New recipe added!'))
-  //         .catchError((error) => print('Failed to add recipe : $error'));
-  //   }

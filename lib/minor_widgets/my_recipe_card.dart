@@ -14,7 +14,7 @@ class MyRecipeCard extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Container(
-              height: 150,
+              height: 250,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 gradient: LinearGradient(
@@ -41,32 +41,62 @@ class MyRecipeCard extends StatelessWidget {
             Positioned.fill(
               child: Row(
                 children: <Widget>[
-                  Image.network(
-                    '${_myRecipe.image}',
-                    height: 64,
-                    width: 64,
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Image.network(
+                      '${_myRecipe.image}',
+                      height: 150,
+                      width: 150,
+                    ),
+                    flex: 2,
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        _myRecipe.recipeTitle,
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        'Ingredients: ${_myRecipe.recipeIngredients}',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        'Description: ${_myRecipe.recipeDescription}',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  )
+                  SizedBox(width: 15),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          _myRecipe.recipeTitle,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 25),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          'Ingredients',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Container(
+                            height: 80,
+                            child: Text(
+                              '${_myRecipe.recipeIngredients}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          'Description: ${_myRecipe.recipeDescription}',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -76,42 +106,3 @@ class MyRecipeCard extends StatelessWidget {
     );
   }
 }
-
-
-//  @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Card(
-//         child: Padding(
-//             padding: const EdgeInsets.all(12.0),
-//             child: Stack(
-//               children: [
-//                 Row(
-//                   children: [
-//                     Padding(
-//                       padding: const EdgeInsets.only(bottom: 10.0),
-//                       child: Text(_myRecipe.recipeTitle),
-//                     ),
-//                   ],
-//                 ),
-//                 Row(
-//                   children: [
-//                     Text('Ingredients: ${_myRecipe.recipeIngredients}')
-//                   ],
-//                 ),
-//                 Row(
-//                   children: [
-//                     Text('Description: ${_myRecipe.recipeDescription}'),
-//                     Container(
-//                     child: Image.network('${_myRecipe.image}'),
-//                     ),
-//                     //   Image.network(
-//                     //   'https://picsum.photos/id/1074/400/400',
-//                     // ),
-//                   ],
-//                 )
-//               ],
-//             )),
-//       ),
-//     );
-//   }
