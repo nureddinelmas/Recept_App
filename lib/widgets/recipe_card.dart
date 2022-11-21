@@ -1,10 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/streambuilder.dart';
 
 class RecipeCard extends StatefulWidget {
-  final String recipeImage;
-  const RecipeCard({super.key, required this.recipeImage});
+
+  final String urlImage;
+  final String label;
+  final String source;
+  final String cuisineType;
+
+  const RecipeCard(
+      {super.key,
+      required this.urlImage,
+      required this.label,
+      required this.source,
+      required this.cuisineType});
+
+  
 
   @override
   State<RecipeCard> createState() => _RecipeCardState();
@@ -13,50 +27,25 @@ class RecipeCard extends StatefulWidget {
 class _RecipeCardState extends State<RecipeCard> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final List recipeImages = [];
+  final firebaseProvider = FirebaseProvider();
 
-  late final listenForFavorites = db
-      .collection("userFavorites")
-      .doc(auth.currentUser?.uid)
-      .collection("favorites")
-      .snapshots()
-      .listen((event) {
-    var tmpList = [];
-    for (var doc in event.docs) {
-      tmpList.add(doc.data()["image"].toString());
+  String modifyLabel(String label) {
+    final string = label.substring(0, 20);
+    if (string.length >= 20) {
+      final newString = string.replaceAll(string, "$string ...");
+      return newString;
     }
-    setState(() {
-      recipeImages.clear();
-      recipeImages.addAll(tmpList);
-      debugPrint(recipeImages.length.toString());
-    });
-  });
-
-  Widget? getImages(List<dynamic> images) {
-    for (var i = 0; i < recipeImages.length; i++) {
-      recipeImages.add(Image.network(recipeImages[i]));
-      return Image.network(recipeImages[i]);
-    }
-    return null;
-  }
-
-  @override
-  initState() {
-    super.initState();
-    listenForFavorites;
-  }
-
-  @override
-  void dispose() {
-    listenForFavorites.cancel();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double paddingLabel = width * 0.1;
+
     return Column(
       children: [
-        const Padding(padding: EdgeInsets.only(top: 5.0)),
+        const Padding(padding: EdgeInsets.only(top: 7.0)),
         Row(
           children: [
             const Padding(
@@ -72,30 +61,33 @@ class _RecipeCardState extends State<RecipeCard> {
               ),
               child: CircleAvatar(
                 child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(widget.recipeImage)
-                    // getImages(recipeImages), //!
-                    ),
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(widget.urlImage),
+                ),
+
               ),
             ),
             Column(
               children: [
                 Row(
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 60.0),
+                      padding: EdgeInsets.only(left: paddingLabel),
                     ),
                     Text(
-                      "recipe name",
-                      style: TextStyle(
+                      modifyLabel(widget.label),
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 15.0),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 5.0),
                     ),
                     Text(
-                      "@Type of dish",
-                      style: TextStyle(fontSize: 10.0, color: Colors.white),
+                      "@${widget.source}",
+                      style: const TextStyle(
+                          fontSize: 10.0,
+                          color: Colors.white,
+                          fontFamily: "times"),
                     ),
                   ],
                 ),
@@ -110,11 +102,18 @@ class _RecipeCardState extends State<RecipeCard> {
                           padding: EdgeInsets.only(left: 10.0),
                         ),
                         Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.only(left: 10.0),
+                          children: [
+                            const Text(
+                              "CusineType: ",
+                              style: TextStyle(color: Colors.white),
                             ),
-                            Text("'Short comment of the recipe'"),
+                            Text(
+                              widget.cuisineType,
+                              style: const TextStyle(fontFamily: "times"),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.only(left: 40.0),
+                            ),
                           ],
                         ),
                       ],
@@ -127,21 +126,21 @@ class _RecipeCardState extends State<RecipeCard> {
         ),
         Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 10.0),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   Icons.receipt,
                   color: Colors.white,
                 ),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.deepOrange,
-                ),
-                Icon(
+                StreamBuilderToggle(
+                    isFavorite: client.isFavorite,
+                    imageUrl: widget.urlImage,
+                    webAdress: "",
+                    label: widget.label,
+                    source: widget.source,
+                    cuisineType: widget.cuisineType),
+                const Icon(
                   Icons.comment,
                   color: Colors.white,
                 ),

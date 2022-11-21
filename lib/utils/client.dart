@@ -3,5 +3,6 @@ class Client {
   String clientID = "";
   String clientApiKey = "";
   String clientPassword = "";
-  String favoriteID = "";
+  String documentID = "";
+  bool isFavorite = false;
 }

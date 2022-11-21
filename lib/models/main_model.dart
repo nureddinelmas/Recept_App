@@ -1,14 +1,15 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'package:recept_app/minor_widgets/fake_search.dart';
 import 'package:recept_app/minor_widgets/recipe_details.dart';
-
-import 'package:recept_app/screens/favorite_screen.dart';
-
-
+import 'package:recept_app/utils/client.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/streambuilder.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
+import 'package:uuid/uuid.dart';
 import 'recipeModel.dart';
 
 class MainModel extends StatefulWidget {
@@ -20,7 +21,6 @@ class MainModel extends StatefulWidget {
 }
 
 class _MainModelState extends State<MainModel> {
-  final firebaseProvider = FirebaseProvider();
   @override
   Widget build(BuildContext context) {
     Future<List> recipeFuture = getRecipes(widget.q);
@@ -59,14 +59,16 @@ class _MainModelState extends State<MainModel> {
 
 class Build extends StatefulWidget {
   final List model;
-  const Build({Key? key, required this.model}) : super(key: key);
-
+  Build({Key? key, required this.model}) : super(key: key);
   @override
   State<Build> createState() => _BuildState();
 }
 
 class _BuildState extends State<Build> {
   final firebaseProvider = FirebaseProvider();
+  final db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return StaggeredGridView.countBuilder(
@@ -124,20 +126,14 @@ class _BuildState extends State<Build> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            IconButton(
-
-                                onPressed: () {
-                                  firebaseProvider.addToFavorite(
-                                    modell['images']['REGULAR']['url'],
-                                    modell['url'],
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.red,
-                                ))
-
-                              
+                            StreamBuilderToggle(
+                              imageUrl: modell["images"]["REGULAR"]["url"],
+                              webAdress: modell["url"],
+                              label: modell["label"],
+                              source: modell["source"],
+                              cuisineType: modell["cuisineType"],
+                              isFavorite: client.isFavorite,
+                            ),
                           ],
                         ),
                       ),
