@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recept_app/utils/utils.dart';
 import 'package:recept_app/utils/client.dart';
+import 'package:uuid/uuid.dart';
 
 class FirebaseProvider {
   final db = FirebaseFirestore.instance;

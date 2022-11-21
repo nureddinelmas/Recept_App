@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:recept_app/models/recipeModel.dart';
+import 'package:recept_app/utils/client.dart';
 
 import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:uuid/uuid.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 final firebaseProvider = FirebaseProvider();
+final client = Client();
 
 class StreamBuilderToggle extends StatefulWidget {
   bool isFavorite = client.isFavorite;

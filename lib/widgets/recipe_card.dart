@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/streambuilder.dart';
 
 class RecipeCard extends StatefulWidget {
   final String urlImage;
@@ -122,21 +123,21 @@ class _RecipeCardState extends State<RecipeCard> {
         ),
         Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 10.0),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   Icons.receipt,
                   color: Colors.white,
                 ),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.deepOrange,
-                ),
-                Icon(
+                StreamBuilderToggle(
+                    isFavorite: client.isFavorite,
+                    imageUrl: widget.urlImage,
+                    webAdress: "",
+                    label: widget.label,
+                    source: widget.source,
+                    cuisineType: widget.cuisineType),
+                const Icon(
                   Icons.comment,
                   color: Colors.white,
                 ),
