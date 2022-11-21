@@ -2,8 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/main_home.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
-
 import 'package:recept_app/screens/auth_screen.dart';
+
+import 'main_widgets/profile_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const AuthScreen(),
+      home: AuthScreen(),
     );
   }
 }

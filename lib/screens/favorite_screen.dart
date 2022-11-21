@@ -156,6 +156,7 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                           source: sources[index],
                           cuisineType: cuisineTypes[index],
                         )),
+
               ),
             ),
           ),

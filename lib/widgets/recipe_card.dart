@@ -5,6 +5,7 @@ import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/streambuilder.dart';
 
 class RecipeCard extends StatefulWidget {
+
   final String urlImage;
   final String label;
   final String source;
@@ -16,6 +17,8 @@ class RecipeCard extends StatefulWidget {
       required this.label,
       required this.source,
       required this.cuisineType});
+
+  
 
   @override
   State<RecipeCard> createState() => _RecipeCardState();
@@ -32,7 +35,6 @@ class _RecipeCardState extends State<RecipeCard> {
       final newString = string.replaceAll(string, "$string ...");
       return newString;
     }
-    return string;
   }
 
   @override
@@ -62,6 +64,7 @@ class _RecipeCardState extends State<RecipeCard> {
                   borderRadius: BorderRadius.circular(10),
                   child: Image.network(widget.urlImage),
                 ),
+
               ),
             ),
             Column(

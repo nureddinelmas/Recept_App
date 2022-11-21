@@ -6,11 +6,13 @@ import 'package:recept_app/main_widgets/recept_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recept_app/utils/utils.dart';
 import 'package:recept_app/utils/client.dart';
-import 'package:uuid/uuid.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseProvider {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  CollectionReference MyRecipes =
+      FirebaseFirestore.instance.collection('MyRecipes');
   final utils = Utils();
   final client = Client();
 
@@ -64,6 +66,7 @@ class FirebaseProvider {
       "clientmail": auth.currentUser?.email,
       "clientID": client.clientID,
       "clientApi": api,
+      "clientName": "",
     };
     await db.collection("users").doc(client.clientID).set(mapOfClient);
   }
@@ -102,6 +105,7 @@ class FirebaseProvider {
     }
   }
 
+
   void toggleFavorite(String labelId) async {
     if (auth.currentUser?.uid != null) {
       if (labelId.isEmpty) {
@@ -124,5 +128,16 @@ class FirebaseProvider {
           .doc(labelId)
           .delete();
     }
+
+  Future<void> addRecipe(String recipeTitle, String recipeIngredients,
+      String recipeDescription) async {
+    await MyRecipes.add({
+      'recipeTitle': recipeTitle,
+      'recipeIngredients': recipeIngredients,
+      'recipeDescription': recipeDescription,
+    })
+        .then((value) => print('New recipe added!'))
+        .catchError((error) => print('Failed to add recipe : $error'));
+
   }
 }
