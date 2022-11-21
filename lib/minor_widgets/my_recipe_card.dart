@@ -8,32 +8,100 @@ class MyRecipeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Text(_myRecipe.recipeTitle),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Stack(
+          children: <Widget>[
+            Container(
+              height: 250,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                gradient: LinearGradient(
+                    colors: [Colors.pink, Colors.red],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.red,
+                    blurRadius: 12,
+                    offset: Offset(0, 6),
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: 0,
+              bottom: 0,
+              child: CustomPaint(
+                size: Size(100, 150),
+              ),
+            ),
+            Positioned.fill(
+              child: Row(
+                children: <Widget>[
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Image.network(
+                      '${_myRecipe.image}',
+                      height: 150,
+                      width: 150,
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Ingredients: ${_myRecipe.recipeIngredients}')
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Description: ${_myRecipe.recipeDescription}')
-                  ],
-                )
-              ],
-            )),
+                    flex: 2,
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    flex: 4,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          _myRecipe.recipeTitle,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 25),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          'Ingredients',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17),
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Container(
+                            height: 80,
+                            child: Text(
+                              '${_myRecipe.recipeIngredients}',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          'Description: ${_myRecipe.recipeDescription}',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w500),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
