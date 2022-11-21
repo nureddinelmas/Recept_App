@@ -34,6 +34,7 @@ class _MyRecipesState extends State<MyRecipes> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Recipes'),
+        backgroundColor: Color.fromARGB(255, 241, 102, 102),
       ),
       body: SafeArea(
         child: ListView.builder(
