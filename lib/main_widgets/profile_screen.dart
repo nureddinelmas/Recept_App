@@ -112,7 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
-        future: user.doc("L0MUEe3AtjgFf571b5d9s7FjFKA3").get(),
+        future: user.doc(FirebaseAuth.instance.currentUser!.uid).get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
