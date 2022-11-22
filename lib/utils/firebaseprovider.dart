@@ -13,6 +13,8 @@ import '../models/recipeModel.dart';
 class FirebaseProvider {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  CollectionReference MyRecipes =
+      FirebaseFirestore.instance.collection('MyRecipes');
   final utils = Utils();
   final client = Client();
   final String? foodSearch = "popular";
@@ -155,5 +157,16 @@ class FirebaseProvider {
         }
       });
     }
+  }
+
+  Future<void> addRecipe(String recipeTitle, String recipeIngredients,
+      String recipeDescription) async {
+    await MyRecipes.add({
+      'recipeTitle': recipeTitle,
+      'recipeIngredients': recipeIngredients,
+      'recipeDescription': recipeDescription,
+    })
+        .then((value) => print('New recipe added!'))
+        .catchError((error) => print('Failed to add recipe : $error'));
   }
 }

@@ -22,7 +22,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: "com.google.gms.google-services"
+apply plugin:'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -30,7 +30,8 @@ android {
     compileSdkVersion 32
     ndkVersion flutter.ndkVersion
 
-    compileOptions {
+
+        compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -52,7 +53,8 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        multiDexEnabled = true
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -69,5 +71,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.android.support:multidex:1.0.3"
+    implementation 'com.android.support:multidex:1.0.3'
+
 }

@@ -58,6 +58,16 @@ packages:
     source: hosted
     version: "4.0.5"
   cloud_firestore_platform_interface:
+<<<<<<< HEAD
+=======
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.8.5"
+  cloud_firestore_web:
+>>>>>>> develop
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
@@ -240,6 +250,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+
   modal_bottom_sheet:
     dependency: "direct main"
     description:
@@ -254,6 +265,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+
   path:
     dependency: transitive
     description:
