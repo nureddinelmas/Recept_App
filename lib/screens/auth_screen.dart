@@ -57,7 +57,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: Platform.isAndroid ? 500 : 900,
+          height: Platform.isAndroid ? 700 : 900,
           color: Colors.grey,
           child: Column(
             children: [
@@ -91,7 +91,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   TextFormFieldPass(passwordTextController, passwordIsHidden),
                   const Padding(
-                    padding: EdgeInsets.only(top: 30.0),
+                    padding: EdgeInsets.only(top: 20.0),
                   ),
                   GestureDetector(
                       child: const Text(
@@ -132,28 +132,28 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                 ],
               ),
+              emailTextController.text.isNotEmpty &&
+                      passwordTextController.text.isNotEmpty
+                  ? ElevatedButton.icon(
+                      onPressed: () {
+                        checkIfEmptyOrNotAndSignInClient(context);
+                      },
+                      icon: Icon(Icons.login),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Times",
+                              fontSize: 18.0),
+                          shape: BeveledRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)))),
+                      label: const Text("Log in"))
+                  : Container(),
             ],
           ),
         ),
       ),
-      floatingActionButton: Platform.isAndroid
-          ? Padding(
-              padding: const EdgeInsets.only(bottom: 60.0),
-              child: SizedBox(
-                width: 200,
-                child: FloatingActionButton.extended(
-                  onPressed: () {
-                    checkIfEmptyOrNotAndSignInClient(context);
-                  },
-                  label: const Text("Log in"),
-                  icon: const Icon(Icons.login),
-                  backgroundColor: Colors.blueGrey,
-                  extendedTextStyle: const TextStyle(fontFamily: "Times"),
-                ),
-              ),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
