@@ -7,7 +7,7 @@ class Utils {
       SnackBar(
         content: Text(enterText),
         action: SnackBarAction(
-            label: "Undo", onPressed: scaffold.hideCurrentSnackBar),
+            label: "Ok", onPressed: scaffold.hideCurrentSnackBar),
       ),
     );
   }
@@ -28,7 +28,6 @@ class Utils {
     );
   }
 }
-
 
 double height(BuildContext context) {
   return MediaQuery.of(context).size.height;

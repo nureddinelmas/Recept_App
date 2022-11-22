@@ -1,9 +1,14 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/drawer_signup.dart';
+import 'package:recept_app/widgets/streambuilder_toggle_and_add.dart';
 import 'package:recept_app/widgets/textformfield_email.dart';
 import "package:recept_app/widgets/textformfield_pass.dart";
 import 'package:recept_app/utils/utils.dart';
+import "dart:io";
+import "package:flutter/cupertino.dart";
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -20,7 +25,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
 
-  void _checkIfEmptyOrNotAndSignInClient(BuildContext context) {
+  void checkIfEmptyOrNotAndSignInClient(BuildContext context) {
     String email, pass;
 
     email = emailTextController.text;
@@ -39,19 +44,20 @@ class _AuthScreenState extends State<AuthScreen> {
         MediaQuery.of(context).orientation == Orientation.landscape;
 
     return Scaffold(
-      drawer: const Drawer(
-        child: DrawerSignUpItem(),
-      ),
+      drawer: Platform.isAndroid
+          ? Drawer(
+              child: DrawerSignUpItem(),
+            )
+          : null,
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.blueGrey,
-        title: const Text(
-          "Foodly",
-          style: TextStyle(fontFamily: "Times", fontSize: 35.0),
-        ),
+        title: const Text("Foodly",
+            style: TextStyle(fontFamily: "Times", fontSize: 35.0)),
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: 500,
+          height: Platform.isAndroid ? 700 : 900,
           color: Colors.grey,
           child: Column(
             children: [
@@ -85,7 +91,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   TextFormFieldPass(passwordTextController, passwordIsHidden),
                   const Padding(
-                    padding: EdgeInsets.only(top: 30.0),
+                    padding: EdgeInsets.only(top: 20.0),
                   ),
                   GestureDetector(
                       child: const Text(
@@ -103,28 +109,51 @@ class _AuthScreenState extends State<AuthScreen> {
                     endIndent: 100,
                     color: Colors.blueGrey,
                   ),
+                  Platform.isAndroid
+                      ? Text("")
+                      : Text("Or",
+                          style: TextStyle(
+                              color: CupertinoColors.white,
+                              fontFamily: "Times")),
+                  Platform.isAndroid
+                      ? Container()
+                      : Container(
+                          height: 150,
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: CupertinoButton(
+                            child: Text(
+                              "Sign Up!",
+                              style: TextStyle(
+                                  color: CupertinoColors.darkBackgroundGray,
+                                  fontFamily: "Times"),
+                            ),
+                            onPressed: () {},
+                          ),
+                        ),
                 ],
               ),
+              emailTextController.text.isNotEmpty &&
+                      passwordTextController.text.isNotEmpty
+                  ? ElevatedButton.icon(
+                      onPressed: () {
+                        checkIfEmptyOrNotAndSignInClient(context);
+                      },
+                      icon: Icon(Icons.login),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          textStyle: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Times",
+                              fontSize: 18.0),
+                          shape: BeveledRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)))),
+                      label: const Text("Log in"))
+                  : Container(),
             ],
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 60.0),
-        child: SizedBox(
-          width: 200,
-          child: FloatingActionButton.extended(
-            onPressed: () {
-              _checkIfEmptyOrNotAndSignInClient(context);
-            },
-            label: const Text("Log in"),
-            icon: const Icon(Icons.login),
-            backgroundColor: Colors.blueGrey,
-            extendedTextStyle: const TextStyle(fontFamily: "Times"),
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

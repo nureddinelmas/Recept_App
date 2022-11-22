@@ -1,10 +1,26 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recept_app/utils/firebaseprovider.dart';
+import 'package:recept_app/widgets/streambuilder_delete.dart';
+import "dart:io";
+import "package:flutter/cupertino.dart";
+import 'package:url_launcher/url_launcher.dart';
 
 class RecipeCard extends StatefulWidget {
-  final String recipeImage;
-  const RecipeCard({super.key, required this.recipeImage});
+  final String urlImage;
+  final String label;
+  final String source;
+  final String cuisineType;
+  final String webAdress;
+
+  const RecipeCard(
+      {super.key,
+      required this.webAdress,
+      required this.urlImage,
+      required this.label,
+      required this.source,
+      required this.cuisineType});
 
   @override
   State<RecipeCard> createState() => _RecipeCardState();
@@ -13,51 +29,48 @@ class RecipeCard extends StatefulWidget {
 class _RecipeCardState extends State<RecipeCard> {
   final db = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final List recipeImages = [];
-  
+  final firebaseProvider = FirebaseProvider();
 
-  late final listenForFavorites = db
-      .collection("userFavorites")
-      .doc(auth.currentUser?.uid)
-      .collection("favorites")
-      .snapshots()
-      .listen((event) {
-    var tmpList = [];
-    for (var doc in event.docs) {
-      tmpList.add(doc.data()["image"].toString());
-    }
-    setState(() {
-      recipeImages.clear();
-      recipeImages.addAll(tmpList);
-      debugPrint(recipeImages.length.toString());
-    });
-  });
+  String modifyLabel(String label) {
+    final string = label.substring(0, label.characters.length);
 
-  Widget? getImages(List<dynamic> images) {
-    for (var i = 0; i < recipeImages.length; i++) {
-      recipeImages.add(Image.network(recipeImages[i]));
-      return Image.network(recipeImages[i]);
+    if (string.length >= 20) {
+      final newString = string.replaceAll(
+          string,
+          string[0] +
+              string[1] +
+              string[2] +
+              string[3] +
+              string[4] +
+              string[5] +
+              string[6] +
+              string[7] +
+              string[8] +
+              string[9] +
+              "...");
+      return newString;
     }
-    return null;
+    return string;
   }
 
-  @override
-  initState() {
-    super.initState();
-    listenForFavorites;
-  }
-
-  @override
-  void dispose() {
-    listenForFavorites.cancel();
-    super.dispose();
+  void launchWebsite(webAdress) async {
+    final uri = Uri.parse(webAdress);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.inAppWebView);
+    } else {
+      print("ERROR");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double paddingLabel = width * 0.2;
+
     return Column(
       children: [
-        const Padding(padding: EdgeInsets.only(top: 5.0)),
+        const Padding(padding: EdgeInsets.only(top: 7.0)),
         Row(
           children: [
             const Padding(
@@ -74,29 +87,36 @@ class _RecipeCardState extends State<RecipeCard> {
               child: CircleAvatar(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(widget.recipeImage)
-                  // getImages(recipeImages), //!
+                  child: GestureDetector(
+                    onTap: () {
+                      launchWebsite(widget.webAdress);
+                    },
+                    child: Image.network(widget.urlImage),
+                  ),
                 ),
               ),
             ),
             Column(
               children: [
                 Row(
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 60.0),
+                      padding: EdgeInsets.only(left: paddingLabel),
                     ),
                     Text(
-                      "recipe name",
-                      style: TextStyle(
+                      modifyLabel(widget.label),
+                      style: const TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 15.0),
                     ),
-                    Padding(
+                    const Padding(
                       padding: EdgeInsets.only(left: 5.0),
                     ),
                     Text(
-                      "@Type of dish",
-                      style: TextStyle(fontSize: 10.0, color: Colors.white),
+                      "@${widget.source}",
+                      style: const TextStyle(
+                          fontSize: 10.0,
+                          color: Colors.white,
+                          fontFamily: "times"),
                     ),
                   ],
                 ),
@@ -111,11 +131,15 @@ class _RecipeCardState extends State<RecipeCard> {
                           padding: EdgeInsets.only(left: 10.0),
                         ),
                         Row(
-                          children: const [
-                            Padding(
-                              padding: EdgeInsets.only(left: 10.0),
+                          children: [
+                            const Text(
+                              "CusineType: ",
+                              style: TextStyle(color: Colors.white),
                             ),
-                            Text("'Short comment of the recipe'"),
+                            Text(
+                              widget.cuisineType,
+                              style: const TextStyle(fontFamily: "times"),
+                            ),
                           ],
                         ),
                       ],
@@ -128,24 +152,31 @@ class _RecipeCardState extends State<RecipeCard> {
         ),
         Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 10.0),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Icon(
-                  Icons.receipt,
-                  color: Colors.white,
+              children: [
+                Platform.isAndroid
+                    ? Icon(
+                        Icons.receipt,
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        CupertinoIcons.rectangle_stack_fill_badge_person_crop,
+                        color: CupertinoColors.white,
+                      ),
+                StreamBuilderDelete(
+                  isFavorite: true,
+                  label: widget.label,
                 ),
-                Icon(
-                  Icons.favorite,
-                  color: Colors.deepOrange,
-                ),
-                Icon(
-                  Icons.comment,
-                  color: Colors.white,
-                ),
+                Platform.isAndroid
+                    ? Icon(
+                        Icons.comment,
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        CupertinoIcons.text_bubble,
+                        color: CupertinoColors.white,
+                      )
               ],
             ),
           ],
