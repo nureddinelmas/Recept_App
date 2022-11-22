@@ -10,14 +10,14 @@ final FirebaseAuth auth = FirebaseAuth.instance;
 final firebaseProvider = FirebaseProvider();
 final client = Client();
 
-class StreamBuilderToggle extends StatefulWidget {
+class StreamBuilderToggleAndDelete extends StatefulWidget {
   bool isFavorite = client.isFavorite;
   dynamic imageUrl;
   dynamic webAdress;
   dynamic label;
   dynamic source;
   dynamic cuisineType;
-  StreamBuilderToggle({
+  StreamBuilderToggleAndDelete({
     super.key,
     required this.isFavorite,
     required this.imageUrl,
@@ -28,10 +28,12 @@ class StreamBuilderToggle extends StatefulWidget {
   });
 
   @override
-  _StreamBuilderToggleState createState() => _StreamBuilderToggleState();
+  _StreamBuilderToggleAndDeleteState createState() =>
+      _StreamBuilderToggleAndDeleteState();
 }
 
-class _StreamBuilderToggleState extends State<StreamBuilderToggle> {
+class _StreamBuilderToggleAndDeleteState
+    extends State<StreamBuilderToggleAndDelete> {
   final Stream<QuerySnapshot> toggleHeart = FirebaseFirestore.instance
       .collection('userFavorites')
       .doc(auth.currentUser?.uid)

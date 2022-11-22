@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
-import 'package:recept_app/widgets/streambuilder.dart';
+import 'package:recept_app/widgets/streambuilder_delete.dart';
+import "dart:io";
+import "package:flutter/cupertino.dart";
+import 'package:cupertino_icons/cupertino_icons.dart';
 
 class RecipeCard extends StatefulWidget {
   final String urlImage;
@@ -126,21 +129,28 @@ class _RecipeCardState extends State<RecipeCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const Icon(
-                  Icons.receipt,
-                  color: Colors.white,
+                Platform.isAndroid
+                    ? Icon(
+                        Icons.receipt,
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        CupertinoIcons.rectangle_stack_fill_badge_person_crop,
+                        color: CupertinoColors.white,
+                      ),
+                StreamBuilderDelete(
+                  isFavorite: true,
+                  label: widget.label,
                 ),
-                StreamBuilderToggle(
-                    isFavorite: client.isFavorite,
-                    imageUrl: widget.urlImage,
-                    webAdress: "",
-                    label: widget.label,
-                    source: widget.source,
-                    cuisineType: widget.cuisineType),
-                const Icon(
-                  Icons.comment,
-                  color: Colors.white,
-                ),
+                Platform.isAndroid
+                    ? Icon(
+                        Icons.comment,
+                        color: Colors.white,
+                      )
+                    : Icon(
+                        CupertinoIcons.text_bubble,
+                        color: CupertinoColors.white,
+                      )
               ],
             ),
           ],
