@@ -1,6 +1,10 @@
+import 'dart:io' show Platform;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:recept_app/main_widgets/main_home.dart';
+import 'package:recept_app/main_widgets/recept_home.dart';
 import '../screens/auth_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -12,105 +16,300 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   CollectionReference user = FirebaseFirestore.instance.collection('users');
-
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: FutureBuilder<DocumentSnapshot>(
-      future: user.doc(FirebaseAuth.instance.currentUser!.uid).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return const Text("Something went wrong");
-        }
-
-        if (snapshot.hasData && !snapshot.data!.exists) {
-          return const Text("Document does not exist");
-        }
-
-        if (snapshot.connectionState == ConnectionState.done) {
-          Map<String, dynamic> data =
-              snapshot.data!.data() as Map<String, dynamic>;
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(data['clientName']),
-              backgroundColor: Colors.yellow.shade900,
-            ),
-            backgroundColor: Colors.grey.shade300,
-            body: Column(
+    void showIOSEdit() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
               children: [
-                const SizedBox(
-                  height: 50,
+                SizedBox(
+                  height: 20,
                 ),
-                const ProfileHeaderLabel(headerLabel: "Account Info."),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      children: [
-                        RepeatedListTile(
-                          title: "Email Address",
-                          icon: Icons.email,
-                          subTitle: data['clientmail'] == ''
-                              ? "There is no email"
-                              : data['clientmail'],
-                        ),
-                      ],
+                TextField(
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(), labelText: "Name"),
+                  controller: _controller,
+                  onChanged: (value) {},
+                ),
+                ButtonBar(
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: Colors.red),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Cancel"),
                     ),
-                  ),
-                ),
-                const ProfileHeaderLabel(headerLabel: "Account Settings"),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
-                    child: Column(
-                      children: [
-                        RepeatedListTile(
-                          title: "Edit Profile",
-                          icon: Icons.edit,
-                          onPressed: () {},
-                        ),
-                        const YellowDivider(),
-                        RepeatedListTile(
-                          title: "Change Password",
-                          icon: Icons.lock,
-                          onPressed: () {},
-                        ),
-                        const YellowDivider(),
-                        RepeatedListTile(
-                          title: "Log out",
-                          subTitle: "",
-                          icon: Icons.logout,
-                          onPressed: () {
-                            FirebaseAuth.instance.signOut().then((value) =>
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AuthScreen())));
-                          },
-                        ),
-                      ],
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (_controller.text != "") {
+                          await user
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .update({
+                            "clientName": _controller.text
+                          }).whenComplete(() {
+                            Navigator.of(context).pop();
+                            setState(() {
+                              _controller.text = "";
+                            });
+                          });
+                        }
+                      },
+                      child: Text("Save Changes"),
                     ),
-                  ),
-                ),
+                  ],
+                )
               ],
             ),
           );
-        }
+        },
+      );
+    }
 
-        return const Center(
-          child: CircularProgressIndicator(
-            color: Colors.purpleAccent,
+    Future showAndroidEdit() => showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              "Edit Name",
+            ),
+            content: SingleChildScrollView(
+              child: TextField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(), labelText: "Name"),
+                controller: _controller,
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel")),
+              TextButton(
+                  onPressed: () async {
+                    if (_controller.text != "") {
+                      await user
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .update({
+                        "clientName": _controller.text
+                      }).whenComplete(() {
+                        Navigator.of(context).pop();
+                        setState(() {
+                          _controller.text = "";
+                        });
+                      });
+                    }
+                  },
+                  child: Text("Save Changes"))
+            ],
+          ),
+        );
+
+    return Scaffold(
+      body: FutureBuilder<DocumentSnapshot>(
+        future: user.doc("L0MUEe3AtjgFf571b5d9s7FjFKA3").get(),
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Text("Something went wrong");
+          }
+
+          if (snapshot.hasData && !snapshot.data!.exists) {
+            return const Text("Document does not exist");
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            Map<String, dynamic> data =
+                snapshot.data!.data() as Map<String, dynamic>;
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(data['clientName']),
+                backgroundColor: Colors.yellow.shade900,
+              ),
+              backgroundColor: Colors.grey.shade300,
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    const ProfileHeaderLabel(headerLabel: "Account Info."),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          children: [
+                            RepeatedListTile(
+                              title: "Email Address",
+                              icon: Icons.email,
+                              subTitle: data['clientmail'] == ''
+                                  ? "There is no email"
+                                  : data['clientmail'],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const ProfileHeaderLabel(headerLabel: "Account Settings"),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Column(
+                          children: [
+                            RepeatedListTile(
+                              title: "Edit Profile",
+                              icon: Icons.edit,
+                              onPressed: () {
+                                Platform.isAndroid
+                                    ? showAndroidEdit()
+                                    : showIOSEdit();
+                              },
+                            ),
+                            const YellowDivider(),
+                            RepeatedListTile(
+                              title: "Change Password",
+                              icon: Icons.lock,
+                              onPressed: () {
+                                Platform.isAndroid
+                                    ? showAndroidChangePassword()
+                                    : showIOSChangePassword();
+                              },
+                            ),
+                            const YellowDivider(),
+                            RepeatedListTile(
+                              title: "Log out",
+                              subTitle: "",
+                              icon: Icons.logout,
+                              onPressed: () {
+                                FirebaseAuth.instance.signOut().then((value) =>
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const AuthScreen())));
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.purpleAccent,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void showIOSChangePassword() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(), labelText: "New Password"),
+                controller: _controller,
+                onChanged: (value) {},
+              ),
+              ButtonBar(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_controller.text != "") {
+                        await FirebaseAuth.instance.currentUser!
+                            .updatePassword(_controller.text)
+                            .then((value) {
+                          debugPrint("Changed Password");
+                          Navigator.of(context).pop();
+                          setState(() {
+                            _controller.text = "";
+                          });
+                        }).catchError((error) {
+                          debugPrint(error.toString());
+                        });
+                      }
+                    },
+                    child: Text("Save Changes"),
+                  ),
+                ],
+              )
+            ],
           ),
         );
       },
-    ));
+    );
   }
+
+  Future showAndroidChangePassword() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            "Edit Password",
+          ),
+          content: SingleChildScrollView(
+            child: TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: "New Password"),
+              controller: _controller,
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel")),
+            TextButton(
+                onPressed: () async {
+                  if (_controller.text != "") {
+                    await FirebaseAuth.instance.currentUser!
+                        .updatePassword(_controller.text)
+                        .then((value) {
+                      debugPrint("Changed Password");
+                      Navigator.of(context).pop();
+                      setState(() {
+                        _controller.text = "";
+                      });
+                    }).catchError((error) {
+                      debugPrint(error.toString());
+                    });
+                  }
+                },
+                child: Text("Save Changes"))
+          ],
+        ),
+      );
 }
 
 class ProfileHeaderLabel extends StatelessWidget {
