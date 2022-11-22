@@ -16,7 +16,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   CollectionReference user = FirebaseFirestore.instance.collection('users');
-  final nameController = TextEditingController();
+  final _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     void showIOSEdit() {
@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 TextField(
                   decoration: InputDecoration(
                       border: OutlineInputBorder(), labelText: "Name"),
-                  controller: nameController,
+                  controller: _controller,
                   onChanged: (value) {},
                 ),
                 ButtonBar(
@@ -47,14 +47,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-                        if (nameController.text != "") {
+                        if (_controller.text != "") {
                           await user
                               .doc(FirebaseAuth.instance.currentUser!.uid)
                               .update({
-                            "clientName": nameController.text
+                            "clientName": _controller.text
                           }).whenComplete(() {
                             Navigator.of(context).pop();
-                            setState(() {});
+                            setState(() {
+                              _controller.text = "";
+                            });
                           });
                         }
                       },
@@ -69,17 +71,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     }
 
-    Future openAndroidDialog() => showDialog(
+    Future showAndroidEdit() => showDialog(
           context: context,
           builder: (context) => AlertDialog(
             title: Text(
-              "Edit Profile",
+              "Edit Name",
             ),
             content: SingleChildScrollView(
               child: TextField(
                 decoration: InputDecoration(
                     border: OutlineInputBorder(), labelText: "Name"),
-                controller: nameController,
+                controller: _controller,
               ),
             ),
             actions: [
@@ -90,14 +92,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text("Cancel")),
               TextButton(
                   onPressed: () async {
-                    if (nameController.text != "") {
+                    if (_controller.text != "") {
                       await user
                           .doc(FirebaseAuth.instance.currentUser!.uid)
                           .update({
-                        "clientName": nameController.text
+                        "clientName": _controller.text
                       }).whenComplete(() {
                         Navigator.of(context).pop();
-                        setState(() {});
+                        setState(() {
+                          _controller.text = "";
+                        });
                       });
                     }
                   },
@@ -166,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               icon: Icons.edit,
                               onPressed: () {
                                 Platform.isAndroid
-                                    ? openAndroidDialog()
+                                    ? showAndroidEdit()
                                     : showIOSEdit();
                               },
                             ),
@@ -174,7 +178,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             RepeatedListTile(
                               title: "Change Password",
                               icon: Icons.lock,
-                              onPressed: () {},
+                              onPressed: () {
+                                Platform.isAndroid
+                                    ? showAndroidChangePassword()
+                                    : showIOSChangePassword();
+                              },
                             ),
                             const YellowDivider(),
                             RepeatedListTile(
@@ -209,6 +217,99 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  void showIOSChangePassword() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(), labelText: "New Password"),
+                controller: _controller,
+                onChanged: (value) {},
+              ),
+              ButtonBar(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.red),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_controller.text != "") {
+                        await FirebaseAuth.instance.currentUser!
+                            .updatePassword(_controller.text)
+                            .then((value) {
+                          debugPrint("Changed Password");
+                          Navigator.of(context).pop();
+                          setState(() {
+                            _controller.text = "";
+                          });
+                        }).catchError((error) {
+                          debugPrint(error.toString());
+                        });
+                      }
+                    },
+                    child: Text("Save Changes"),
+                  ),
+                ],
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future showAndroidChangePassword() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(
+            "Edit Password",
+          ),
+          content: SingleChildScrollView(
+            child: TextField(
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(), labelText: "New Password"),
+              controller: _controller,
+            ),
+          ),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel")),
+            TextButton(
+                onPressed: () async {
+                  if (_controller.text != "") {
+                    await FirebaseAuth.instance.currentUser!
+                        .updatePassword(_controller.text)
+                        .then((value) {
+                      debugPrint("Changed Password");
+                      Navigator.of(context).pop();
+                      setState(() {
+                        _controller.text = "";
+                      });
+                    }).catchError((error) {
+                      debugPrint(error.toString());
+                    });
+                  }
+                },
+                child: Text("Save Changes"))
+          ],
+        ),
+      );
 }
 
 class ProfileHeaderLabel extends StatelessWidget {
