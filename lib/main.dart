@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:recept_app/main_widgets/main_home.dart';
 import 'package:recept_app/main_widgets/profile_screen.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';

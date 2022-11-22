@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/main_home.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
 import '../screens/auth_screen.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
