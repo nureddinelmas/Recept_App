@@ -93,7 +93,6 @@ class _RecipeCardState extends State<RecipeCard> {
                     },
                     child: Image.network(widget.urlImage),
                   ),
-                  // child: Image.network(widget.urlImage),
                 ),
               ),
             ),
@@ -140,9 +139,6 @@ class _RecipeCardState extends State<RecipeCard> {
                             Text(
                               widget.cuisineType,
                               style: const TextStyle(fontFamily: "times"),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 40.0),
                             ),
                           ],
                         ),

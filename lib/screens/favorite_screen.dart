@@ -34,6 +34,10 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
   final List sources = [];
   final List cuisineTypes = [];
   final List webAdresses = [];
+  final List mock = [
+    "https://png.pngtree.com/png-vector/20190917/ourlarge/pngtree-meal-icon-vectors-png-image_1737729.jpg",
+    "https://static.vecteezy.com/system/resources/thumbnails/006/692/762/small/taco-icon-template-black-color-editable-taco-icon-symbol-flat-illustration-for-graphic-and-web-design-free-vector.jpg"
+  ];
   String recipeTitle = "";
 
   late final listenForFavorites = db
@@ -110,7 +114,9 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                     color: Colors.grey,
                   ),
                   child: CarouselSlider.builder(
-                    itemCount: recipeImages.length,
+                    itemCount: recipeImages.isNotEmpty
+                        ? recipeImages.length
+                        : mock.length,
                     itemBuilder: (context, itemIndex, pageViewIndex) =>
                         ClipRRect(
                             borderRadius: BorderRadius.circular(15.0),
@@ -118,7 +124,9 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                               onTap: () {
                                 launchWebsite(webAdresses[itemIndex]);
                               },
-                              child: Image.network(recipeImages[itemIndex]),
+                              child: recipeImages.isNotEmpty
+                                  ? Image.network(recipeImages[itemIndex])
+                                  : Image.network(mock[itemIndex]),
                             )),
                     options: CarouselOptions(
                       aspectRatio: height / 400,
@@ -149,21 +157,44 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                 borderRadius: BorderRadius.circular(5.0),
               ),
               child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(
-                    recipeImages.length,
-                    (index) => RecipeCard(
-                      urlImage: recipeImages[index],
-                      label: labels[index],
-                      source: sources[index],
-                      cuisineType: cuisineTypes[index],
-                      webAdress: webAdresses[index],
-                    ),
-                  ),
-                ),
+                child: recipeImages.isEmpty
+                    ? Column(children: [
+                        Padding(padding: EdgeInsets.only(top: 100.0)),
+                        Text(
+                          "No Recipes Added Yet",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Times",
+                              fontSize: 20.0),
+                        ),
+                        Padding(padding: EdgeInsets.only(top: 20.0)),
+                        Container(
+                          width: 200,
+                          height: 200,
+                          child: CircleAvatar(
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                  "https://b.thumbs.redditmedia.com/p6TgyVO21xdL_a9sWMqnLnpNcJniZ4ZTwoOTq_b8nVY.png"),
+                            ),
+                          ),
+                        ),
+                      ])
+                    : Column(
+                        children: List.generate(
+                          recipeImages.length,
+                          (index) => RecipeCard(
+                            urlImage: recipeImages[index],
+                            label: labels[index],
+                            source: sources[index],
+                            cuisineType: cuisineTypes[index],
+                            webAdress: webAdresses[index],
+                          ),
+                        ),
+                      ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
