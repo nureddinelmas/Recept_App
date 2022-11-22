@@ -1,4 +1,7 @@
+import 'dart:collection';
 import 'dart:convert';
+import 'dart:math';
+import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 
 class RecipeModel {
@@ -493,25 +496,22 @@ class EnumValues<T> {
   }
 }
 
-
 Future<List> getRecipes(String q) async {
-
-
   List list1 = [];
   List list2 = [];
   var url =
-      "https://api.edamam.com/api/recipes/v2?type=public&q=$q&app_id=062e2906&app_key=ab4f8a9c1b6ba8b2b72c475829e7f354";
+      "https://api.edamam.com/api/recipes/v2?type=public&q=${q}&app_id=062e2906&app_key=ab4f8a9c1b6ba8b2b72c475829e7f354";
+
   final response = await http.get(Uri.parse(url));
 
   final body = json.decode(response.body)['hits'];
 
   for (var item in body) {
     list1.add(item['recipe']);
-
-    list1.forEach((element) {
-      list2.add(element);
-    });
   }
+  list1.forEach((element) {
+    list2.add(element);
+  });
 
   return list2;
 }

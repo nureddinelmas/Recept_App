@@ -1,9 +1,14 @@
+import 'dart:collection';
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recept_app/utils/utils.dart';
 import 'package:recept_app/utils/client.dart';
+
+import '../models/recipeModel.dart';
 
 class FirebaseProvider {
   final db = FirebaseFirestore.instance;
@@ -79,20 +84,59 @@ class FirebaseProvider {
     return client.clientApiKey;
   }
 
-  void addToFavorite(dynamic imageUrl, dynamic webAdress) {
+
+
+
+ bool compareTwoRecipes(String labelApi) {
     if (auth.currentUser?.uid != null) {
-      final mapOfFavorites = <String, dynamic>{
-        "image": imageUrl,
-        "web": webAdress
-      };
-      db
-          .collection("userFavorites")
+       db
+          .collection("userFavoritesData")
           .doc(auth.currentUser?.uid)
           .collection("favorites")
-          .doc()
-          .set(mapOfFavorites);
+          .get()
+          .then((documents) {
+        for (var document in documents.docs) {
+          if (document.exists) {
+            debugPrint(document.id);
+            final label = document.get("label");
+            return label == labelApi;
+          }
+        }
+      });
+    }
+
+      return false;
+  }
+
+
+
+
+  void addToFavorite(LinkedHashMap<String, dynamic> recipe, String label) {
+    if (auth.currentUser?.uid != null) {
+      db
+          .collection("userFavoritesData")
+          .doc(auth.currentUser?.uid)
+          .collection("favorites")
+          .doc(label)
+          .set(recipe);
     }
   }
+
+
+  // void addToFavorite(dynamic imageUrl, dynamic webAdress) {
+  //   if (auth.currentUser?.uid != null) {
+  //     final mapOfFavorites = <String, dynamic>{
+  //       "image": imageUrl,
+  //       "web": webAdress
+  //     };
+  //     db
+  //         .collection("userFavorites")
+  //         .doc(auth.currentUser?.uid)
+  //         .collection("favorites")
+  //         .doc()
+  //         .set(mapOfFavorites);
+  //   }
+  // }
 
   void getUserFavorites() async {
     final favorites = [];
