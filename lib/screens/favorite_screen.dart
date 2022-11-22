@@ -157,6 +157,7 @@ class _FavoriteRecipesState extends State<FavoriteRecipes> {
                       label: labels[index],
                       source: sources[index],
                       cuisineType: cuisineTypes[index],
+                      webAdress: webAdresses[index],
                     ),
                   ),
                 ),

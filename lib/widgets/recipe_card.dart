@@ -5,16 +5,18 @@ import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:recept_app/widgets/streambuilder_delete.dart';
 import "dart:io";
 import "package:flutter/cupertino.dart";
-import 'package:cupertino_icons/cupertino_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RecipeCard extends StatefulWidget {
   final String urlImage;
   final String label;
   final String source;
   final String cuisineType;
+  final String webAdress;
 
   const RecipeCard(
       {super.key,
+      required this.webAdress,
       required this.urlImage,
       required this.label,
       required this.source,
@@ -30,19 +32,41 @@ class _RecipeCardState extends State<RecipeCard> {
   final firebaseProvider = FirebaseProvider();
 
   String modifyLabel(String label) {
-    final string = label.substring(0, 20);
+    final string = label.substring(0, label.characters.length);
+
     if (string.length >= 20) {
-      final newString = string.replaceAll(string, "$string ...");
+      final newString = string.replaceAll(
+          string,
+          string[0] +
+              string[1] +
+              string[2] +
+              string[3] +
+              string[4] +
+              string[5] +
+              string[6] +
+              string[7] +
+              string[8] +
+              string[9] +
+              "...");
       return newString;
     }
     return string;
+  }
+
+  void launchWebsite(webAdress) async {
+    final uri = Uri.parse(webAdress);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.inAppWebView);
+    } else {
+      print("ERROR");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    double paddingLabel = width * 0.1;
+    double paddingLabel = width * 0.2;
 
     return Column(
       children: [
@@ -63,7 +87,13 @@ class _RecipeCardState extends State<RecipeCard> {
               child: CircleAvatar(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(widget.urlImage),
+                  child: GestureDetector(
+                    onTap: () {
+                      launchWebsite(widget.webAdress);
+                    },
+                    child: Image.network(widget.urlImage),
+                  ),
+                  // child: Image.network(widget.urlImage),
                 ),
               ),
             ),
