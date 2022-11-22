@@ -155,7 +155,7 @@ class _AddRecipeState extends State<AddRecipe> {
                                   _photo!,
                                   width: 350,
                                   height: 350,
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.fill,
                                 ),
                               )
                             : Container(
