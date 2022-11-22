@@ -23,7 +23,7 @@ class _DrawerSignUpItemState extends State<DrawerSignUpItem> {
   final passwordTextController = TextEditingController();
   final confirmPassController = TextEditingController();
 
-  void _checkIfEmptyOrNot(BuildContext context) {
+  void checkIfEmptyOrNot(BuildContext context) {
     String email, pass, confirmPass;
 
     email = emailTextController.text;
@@ -115,14 +115,14 @@ class _DrawerSignUpItemState extends State<DrawerSignUpItem> {
           ),
           ElevatedButton.icon(
             onPressed: () {
-              _checkIfEmptyOrNot(context);
+              checkIfEmptyOrNot(context);
               Navigator.of(context).pop();
             },
             icon: const Icon(Icons.local_pizza),
             style: ElevatedButton.styleFrom(
               elevation: 20,
               shape: const StadiumBorder(),
-           //   backgroundColor: Colors.grey,
+              backgroundColor: Colors.grey,
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
               textStyle: const TextStyle(fontSize: 20.0, fontFamily: "Times"),
             ),

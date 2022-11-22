@@ -127,16 +127,16 @@ class FirebaseProvider {
           .doc(labelId)
           .delete();
     }
+  }
 
-    Future<void> addRecipe(String recipeTitle, String recipeIngredients,
-        String recipeDescription) async {
-      await MyRecipes.add({
-        'recipeTitle': recipeTitle,
-        'recipeIngredients': recipeIngredients,
-        'recipeDescription': recipeDescription,
-      })
-          .then((value) => print('New recipe added!'))
-          .catchError((error) => print('Failed to add recipe : $error'));
-    }
+  Future<void> addRecipe(String recipeTitle, String recipeIngredients,
+      String recipeDescription) async {
+    await MyRecipes.add({
+      'recipeTitle': recipeTitle,
+      'recipeIngredients': recipeIngredients,
+      'recipeDescription': recipeDescription,
+    })
+        .then((value) => print('New recipe added!'))
+        .catchError((error) => print('Failed to add recipe : $error'));
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:recept_app/minor_widgets/recipe_details.dart';
 import 'package:recept_app/utils/client.dart';
 import 'package:recept_app/utils/firebaseprovider.dart';
-import 'package:recept_app/widgets/streambuilder.dart';
+import 'package:recept_app/widgets/streambuilder_toggle_and_add.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:uuid/uuid.dart';
@@ -126,7 +126,7 @@ class _BuildState extends State<Build> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-                            StreamBuilderToggle(
+                            StreamBuilderToggleAndDelete(
                               imageUrl: modell["images"]["REGULAR"]["url"],
                               webAdress: modell["url"],
                               label: modell["label"],

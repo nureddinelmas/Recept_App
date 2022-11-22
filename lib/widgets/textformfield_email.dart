@@ -9,18 +9,20 @@ class TextFormFieldWidgetEmail extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 250,
-      child: TextFormField(
-        keyboardType: TextInputType.text,
-        controller: emailController,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white,
-          labelText: "Email",
-          suffixIcon: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.mail,
-              color: Colors.blueGrey,
+      child: Visibility(
+        child: TextFormField(
+          keyboardType: TextInputType.text,
+          controller: emailController,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            labelText: "Email",
+            suffixIcon: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.mail,
+                color: Colors.blueGrey,
+              ),
             ),
           ),
         ),
