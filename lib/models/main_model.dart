@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:recept_app/minor_widgets/fake_search.dart';
 import 'package:recept_app/minor_widgets/recipe_details.dart';
-
-import 'package:recept_app/screens/favorite_screen.dart';
 
 import 'package:recept_app/utils/firebaseprovider.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';

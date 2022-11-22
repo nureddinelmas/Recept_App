@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recept_app/minor_widgets/search.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class FakeSearch extends StatelessWidget {
   const FakeSearch({
@@ -27,7 +28,7 @@ class FakeSearch extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.only(left: 10),
                   child: Icon(
@@ -35,9 +36,20 @@ class FakeSearch extends StatelessWidget {
                     color: Colors.grey,
                   ),
                 ),
-                Text(
-                  "What are you looking for? ",
-                  style: TextStyle(color: Colors.grey, fontSize: 16),
+                Center(
+                  child: SizedBox(
+                    width: 200,
+                    child: AnimatedTextKit(
+                      animatedTexts: [
+                        TypewriterAnimatedText(
+                          'What are you looking for? ',
+                          textStyle:
+                              TextStyle(color: Colors.grey, fontSize: 16),
+                        ),
+                      ],
+                      repeatForever: true,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -48,10 +60,16 @@ class FakeSearch extends StatelessWidget {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.amber.shade300),
-              child: Text(
-                "Search ",
-                style: TextStyle(
-                    color: Colors.black.withOpacity(0.6), fontSize: 16),
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  WavyAnimatedText(
+                    'Search',
+                    textStyle: TextStyle(
+                        color: Colors.black.withOpacity(0.6), fontSize: 16),
+                  ),
+                ],
+                isRepeatingAnimation: true,
+                repeatForever: true,
               ),
             ),
           ],

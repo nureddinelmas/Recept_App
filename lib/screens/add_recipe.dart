@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:recept_app/colors.dart';
-import 'package:recept_app/utils/firebaseprovider.dart';
-import 'package:recept_app/models/recipes.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddRecipe extends StatelessWidget {

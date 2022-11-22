@@ -1,6 +1,4 @@
 import 'dart:collection';
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recept_app/main_widgets/recept_home.dart';
@@ -86,12 +84,9 @@ class FirebaseProvider {
     return client.clientApiKey;
   }
 
-
-
-
- bool compareTwoRecipes(String labelApi) {
+  bool compareTwoRecipes(String labelApi) {
     if (auth.currentUser?.uid != null) {
-       db
+      db
           .collection("userFavoritesData")
           .doc(auth.currentUser?.uid)
           .collection("favorites")
@@ -107,11 +102,8 @@ class FirebaseProvider {
       });
     }
 
-      return false;
+    return false;
   }
-
-
-
 
   void addToFavorite(LinkedHashMap<String, dynamic> recipe, String label) {
     if (auth.currentUser?.uid != null) {
@@ -123,7 +115,6 @@ class FirebaseProvider {
           .set(recipe);
     }
   }
-
 
   // void addToFavorite(dynamic imageUrl, dynamic webAdress) {
   //   if (auth.currentUser?.uid != null) {

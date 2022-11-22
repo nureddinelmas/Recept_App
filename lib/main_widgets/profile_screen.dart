@@ -3,8 +3,6 @@ import 'dart:io' show Platform;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:recept_app/main_widgets/main_home.dart';
-import 'package:recept_app/main_widgets/recept_home.dart';
 import '../screens/auth_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   CollectionReference user = FirebaseFirestore.instance.collection('users');
   final _controller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     void showIOSEdit() {
@@ -112,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
-        future: user.doc("L0MUEe3AtjgFf571b5d9s7FjFKA3").get(),
+        future: user.doc(FirebaseAuth.instance.currentUser!.uid).get(),
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.hasError) {
